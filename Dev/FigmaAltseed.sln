@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FigmaAltseed", "FigmaAltseed\FigmaAltseed.csproj", "{55F63990-E31D-4AD0-BE15-BE222353F0DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06C99470-F0E8-4AC0-8621-377869F40410}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documents\memo.txt = ..\Documents\memo.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55F63990-E31D-4AD0-BE15-BE222353F0DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55F63990-E31D-4AD0-BE15-BE222353F0DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55F63990-E31D-4AD0-BE15-BE222353F0DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55F63990-E31D-4AD0-BE15-BE222353F0DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A218CFF3-9E61-4FC2-BACE-1252ED8E7C57}
+	EndGlobalSection
+EndGlobal
