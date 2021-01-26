@@ -4,7 +4,7 @@ using FigmaSharp;
 using FigmaSharp.Models;
 using Svg;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Converter
 {
 	internal record SvgFileInfo(SvgDocument Document, string FilePath);
 

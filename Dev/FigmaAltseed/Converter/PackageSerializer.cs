@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
+using FigmaAltseed.Records;
 
 namespace FigmaAltseed.Converter
 {

@@ -1,6 +1,6 @@
 ﻿using Altseed2;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Records
 {
 	public abstract class FigmaAltseedNode
 	{

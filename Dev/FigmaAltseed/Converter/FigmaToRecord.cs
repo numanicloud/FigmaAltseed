@@ -3,12 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Altseed2;
+using FigmaAltseed.Records;
 using FigmaSharp;
 using FigmaSharp.Models;
 using AppContext = FigmaSharp.AppContext;
 using File = System.IO.File;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Converter
 {
 	internal class FigmaToRecord
 	{

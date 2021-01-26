@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Linq;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Converter
 {
 	internal record PngFileInfo(Bitmap Bitmap, string Path);
 

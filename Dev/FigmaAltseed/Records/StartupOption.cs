@@ -1,4 +1,4 @@
-﻿namespace FigmaAltseed
+﻿namespace FigmaAltseed.Records
 {
 	internal class StartupOption
 	{

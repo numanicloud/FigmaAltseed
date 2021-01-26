@@ -1,8 +1,9 @@
-﻿using FigmaSharp;
+﻿using FigmaAltseed.Records;
+using FigmaSharp;
 using FigmaSharp.Models;
 using AppContext = FigmaSharp.AppContext;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Converter
 {
 	internal class FigmaLoader
 	{

@@ -1,7 +1,6 @@
 ﻿using System;
-using FigmaAltseed.Converter;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Converter
 {
 	internal class MainConverter
 	{
