@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Svg.Exceptions;
 
 namespace FigmaAltseed.Converter
 {
@@ -10,7 +12,18 @@ namespace FigmaAltseed.Converter
 	{
 		public IEnumerable<PngFileInfo> Covert(IEnumerable<SvgFileInfo> svgDocuments)
 		{
-			return svgDocuments.Select(x => new PngFileInfo(x.Document.Draw(), x.FilePath));
+			return svgDocuments.Select(x =>
+			{
+				try
+				{
+					return new PngFileInfo(x.Document.Draw(), x.FilePath);
+				}
+				catch (SvgMemoryException exception)
+				{
+					Console.WriteLine($"{exception}; {x.FilePath}");
+					return null;
+				}
+			}).FilterNull();
 		}
 	}
 }

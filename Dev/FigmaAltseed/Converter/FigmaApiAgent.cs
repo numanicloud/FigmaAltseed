@@ -5,18 +5,11 @@ using AppContext = FigmaSharp.AppContext;
 
 namespace FigmaAltseed.Converter
 {
-	internal class FigmaLoader
+	internal class FigmaApiAgent
 	{
-		private readonly StartupOption _option;
-
-		public FigmaLoader(StartupOption option)
+		public FigmaDocument? Download(StartupOption option)
 		{
-			_option = option;
-		}
-
-		public FigmaDocument? Download()
-		{
-			var query = new FigmaFileQuery(_option.FileId, _option.Token);
+			var query = new FigmaFileQuery(option.FileId, option.Token);
 			var response = AppContext.Api.GetFile(query);
 			return response?.document;
 		}

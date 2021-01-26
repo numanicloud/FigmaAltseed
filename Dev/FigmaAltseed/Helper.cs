@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FigmaSharp.Models;
 using Color = System.Drawing.Color;
 
@@ -25,6 +26,20 @@ namespace FigmaAltseed
 		public static string GetImageAssetPath(this FigmaNode node)
 		{
 			return node.id.Replace(":", "-").Replace(";", "_") + ".png";
+		}
+
+		public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source)
+			where T : notnull
+		{
+			foreach (var item in source)
+			{
+				if (item is null)
+				{
+					continue;
+				}
+
+				yield return item;
+			}
 		}
 	}
 }

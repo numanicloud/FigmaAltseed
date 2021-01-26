@@ -23,8 +23,11 @@ namespace FigmaAltseed.Converter
 			{
 				var pngFile = zip.CreateEntry(asset.Path);
 				using var pngStream = pngFile.Open();
+				
+				using var memoryStream = new MemoryStream();
+				asset.Bitmap.Save(memoryStream, ImageFormat.Png);
 
-				asset.Bitmap.Save(pngStream, ImageFormat.Png);
+				pngStream.Write(memoryStream.GetBuffer());
 			}
 		}
 

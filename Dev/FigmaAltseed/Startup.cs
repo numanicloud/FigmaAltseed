@@ -33,7 +33,7 @@ namespace FigmaAltseed
 				return Task.CompletedTask;
 			}
 
-			_mainConverter.ConvertToAltseed();
+			_mainConverter.ConvertToAltseed(_option);
 			_appLifetime.StopApplication();
 
 			return Task.CompletedTask;

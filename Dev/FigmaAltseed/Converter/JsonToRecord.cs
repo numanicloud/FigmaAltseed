@@ -11,15 +11,8 @@ using File = System.IO.File;
 
 namespace FigmaAltseed.Converter
 {
-	internal class FigmaToRecord
+	internal class JsonToRecord
 	{
-		private readonly StartupOption _option;
-
-		public FigmaToRecord(StartupOption option)
-		{
-			_option = option;
-		}
-
 		public FigmaEmptyNode GetRecordTree(FigmaDocument document)
 		{
 			var canvas = document.children.First();
@@ -53,14 +46,14 @@ namespace FigmaAltseed.Converter
 		}
 
 		// 画像ダウンロードの実装例として残しておく
-		private string GetImage(FigmaVector pivot)
+		private string GetImage(FigmaVector pivot, StartupOption option)
 		{
 			string GetImageUrl()
 			{
-				var query = new FigmaImageQuery(_option.FileId, new IImageNodeRequest[]
+				var query = new FigmaImageQuery(option.FileId, new IImageNodeRequest[]
 				{
 					new ImageNodeRequest(pivot),
-				}, _option.Token);
+				}, option.Token);
 				var response = AppContext.Api.GetImage(query);
 
 				var s = response.images.Values.First();
