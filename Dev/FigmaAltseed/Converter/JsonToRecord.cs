@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using Altseed2;
+using System.Numerics;
 using FigmaAltseed.Records;
 using FigmaSharp;
 using FigmaSharp.Models;
@@ -35,8 +35,8 @@ namespace FigmaAltseed.Converter
 					: new Rectangle(0, 0, 0, 0);
 
 				return new FigmaSpriteNode(pivot.GetImageAssetPath(),
-					new Vector2F(bound.X, bound.Y),
-					new Vector2F(bound.Width, bound.Height))
+					new Vector2(bound.X, bound.Y),
+					new Vector2(bound.Width, bound.Height))
 				{
 					Children = children,
 				};

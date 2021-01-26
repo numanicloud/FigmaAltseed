@@ -2,8 +2,8 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Text.Json;
 using FigmaAltseed.Records;
+using Newtonsoft.Json;
 
 namespace FigmaAltseed.Converter
 {
@@ -33,7 +33,7 @@ namespace FigmaAltseed.Converter
 
 		private static void ArchiveNodeTree(FigmaAltseedNode nodeTree, ZipArchive zip)
 		{
-			var json = JsonSerializer.Serialize(nodeTree);
+			var json = JsonConvert.SerializeObject(nodeTree);
 			var nodeFile = zip.CreateEntry("nodes.json");
 
 			using var writer = new StreamWriter(nodeFile.Open());

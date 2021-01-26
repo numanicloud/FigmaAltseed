@@ -41,19 +41,61 @@ namespace FigmaAltseed.Converter
 			return result;
 		}
 
+		private SvgDocument? RenderVector2(FigmaVector node)
+		{
+			if (node is FigmaText)
+			{
+				return null;
+			}
+
+			var (doc, rect) = CreateRectangleSvg(node.absoluteBoundingBox);
+			var (_, updated1) = ApplyFill(rect, node.fills);
+			var (_, updated2) = ApplyStroke(rect, node.strokes, node.strokeWeight);
+
+			if (node is RectangleVector rv)
+			{
+				ApplyCornerRadius(rect, rv.cornerRadius);
+			}
+
+			if (updated1 || updated2)
+			{
+				return doc;
+			}
+
+			return null;
+		}
+
+		private SvgDocument? RenderFrame2(FigmaFrame node)
+		{
+			var (doc, rect) = CreateRectangleSvg(node.absoluteBoundingBox);
+			var (_, updated1) = ApplyFill(rect, node.fills);
+			var (_, updated2) = ApplyStroke(rect, node.strokes, node.strokeWeight);
+			ApplyCornerRadius(rect, node.cornerRadius);
+
+			if (updated1 || updated2)
+			{
+				return doc;
+			}
+
+			return null;
+		}
+
 		private (SvgDocument document, SvgRectangle rectangle) CreateRectangleSvg(Rectangle bound)
 		{
 			var doc = new SvgDocument()
 			{
-				Width = bound.Width,
-				Height = bound.Height,
-				ViewBox = new SvgViewBox(0, 0, bound.Width, bound.Height),
+				X = new SvgUnit(SvgUnitType.Pixel, 0),
+				Y = new SvgUnit(SvgUnitType.Pixel, 0),
+				Width = new SvgUnit(SvgUnitType.Pixel, bound.Width),
+				Height = new SvgUnit(SvgUnitType.Pixel, bound.Height),
 			};
 
 			var rectangle = new SvgRectangle()
 			{
-				Width = bound.Width,
-				Height = bound.Height,
+				X = new SvgUnit(SvgUnitType.Pixel, 0),
+				Y = new SvgUnit(SvgUnitType.Pixel, 0),
+				Width = new SvgUnit(SvgUnitType.Pixel, bound.Width),
+				Height = new SvgUnit(SvgUnitType.Pixel, bound.Height),
 			};
 
 			doc.Children.Add(rectangle);
@@ -88,43 +130,25 @@ namespace FigmaAltseed.Converter
 			}
 
 			var stroke = color[0];
+
 			rectangle.Stroke = new SvgColourServer(stroke.color.ToDotNet());
 			rectangle.StrokeWidth = new SvgUnit(SvgUnitType.Pixel, width);
+
+			// ストロークの太さの分だけ調整
+			var wpx = new SvgUnit(SvgUnitType.Pixel, width);
+
+			rectangle.X += wpx / 2;
+			rectangle.Y += wpx / 2;
+			rectangle.OwnerDocument.Width += wpx;
+			rectangle.OwnerDocument.Height += wpx;
 
 			return (rectangle, true);
 		}
 
-		private SvgDocument? RenderVector2(FigmaVector node)
+		private void ApplyCornerRadius(SvgRectangle rectangle, float cornerRadius)
 		{
-			if (node is FigmaText)
-			{
-				return null;
-			}
-
-			var (doc, rect) = CreateRectangleSvg(node.absoluteBoundingBox);
-			var (_, updated1) = ApplyFill(rect, node.fills);
-			var (_, updated2) = ApplyStroke(rect, node.strokes, node.strokeWeight);
-
-			if (updated1 || updated2)
-			{
-				return doc;
-			}
-
-			return null;
-		}
-
-		private SvgDocument? RenderFrame2(FigmaFrame node)
-		{
-			var (doc, rect) = CreateRectangleSvg(node.absoluteBoundingBox);
-			var (_, updated1) = ApplyFill(rect, node.fills);
-			var (_, updated2) = ApplyStroke(rect, node.strokes, node.strokeWeight);
-
-			if (updated1 || updated2)
-			{
-				return doc;
-			}
-
-			return null;
+			rectangle.CornerRadiusX = cornerRadius;
+			rectangle.CornerRadiusY = cornerRadius;
 		}
 	}
 }
