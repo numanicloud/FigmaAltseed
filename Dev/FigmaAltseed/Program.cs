@@ -1,12 +1,26 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace FigmaAltseed
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		internal static async Task Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			await Host.CreateDefaultBuilder(args)
+				.ConfigureAppConfiguration(builder =>
+				{
+					builder.AddCommandLine(args);
+				})
+				.ConfigureServices((context, collection) =>
+				{
+					collection.Configure<StartupOption>(context.Configuration);
+					collection.AddHostedService<Startup>();
+				}).RunConsoleAsync();
 		}
 	}
 }
