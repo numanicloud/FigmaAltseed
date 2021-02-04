@@ -27,6 +27,7 @@ namespace FigmaAltseed
 					collection.AddSingleton<SvgToPng>();
 					collection.AddSingleton<PackageSerializer>();
 					collection.AddSingleton<MainConverter>();
+					collection.AddSingleton<AltTransformLoader>();
 				}).RunConsoleAsync();
 		}
 	}

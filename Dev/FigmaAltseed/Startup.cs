@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FigmaAltseed.Converter;
@@ -26,22 +27,36 @@ namespace FigmaAltseed
 		{
 			if (!_option.GetIsValid())
 			{
-				Console.WriteLine("Usase:");
-				Console.WriteLine($"FigmaAltseed {nameof(StartupOption.FileId)}=\"Figma file ID\" {nameof(StartupOption.Token)}=\"Figma user access token\"");
-
-				_appLifetime.StopApplication();
-				return Task.CompletedTask;
+				Console.WriteLine(GetHelp());
+			}
+			else
+			{
+				_mainConverter.ConvertToAltseed(_option);
 			}
 
-			_mainConverter.ConvertToAltseed(_option);
 			_appLifetime.StopApplication();
-
 			return Task.CompletedTask;
 		}
 
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
 			return Task.CompletedTask;
+		}
+
+		private string GetHelp()
+		{
+			var options = new string[]
+			{
+				"FigmaAltseed",
+				$"{nameof(StartupOption.FileId)}=\"Figma file ID\"",
+				$"{nameof(StartupOption.Token)}=\"Figma user access token\""
+			};
+
+			var builder = new StringBuilder();
+			builder.AppendLine("Usase:");
+			builder.AppendJoin(" ", options);
+
+			return builder.ToString();
 		}
 	}
 }

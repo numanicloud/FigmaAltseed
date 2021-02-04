@@ -10,22 +10,29 @@ namespace FigmaAltseed.Converter
 		private readonly JsonToSvg _svgConverter;
 		private readonly SvgToPng _pngConverter;
 		private readonly PackageSerializer _serializer;
+		private readonly AltTransformLoader _altTransformLoader;
 
 		public MainConverter(FigmaApiAgent apiAgent, JsonToRecord recordConverter,
-			JsonToSvg svgConverter, SvgToPng pngConverter, PackageSerializer serializer)
+			JsonToSvg svgConverter, SvgToPng pngConverter, PackageSerializer serializer,
+			AltTransformLoader altTransformLoader)
 		{
 			_apiAgent = apiAgent;
 			_recordConverter = recordConverter;
 			_svgConverter = svgConverter;
 			_pngConverter = pngConverter;
 			_serializer = serializer;
+			_altTransformLoader = altTransformLoader;
 		}
 
 		public void ConvertToAltseed(StartupOption option)
 		{
 			var figmaDocument = _apiAgent.Download(option) ?? throw new Exception("Figma APIからファイルを取得できませんでした。");
-			var nodes = _recordConverter.GetRecordTree(figmaDocument);
-			var svgData = _svgConverter.ExtractSvgImages(figmaDocument.children[0]);
+			var canvas = figmaDocument.children[0];
+
+			var nodes = _recordConverter.GetRecordTree(canvas);
+			_altTransformLoader.Load(nodes, canvas);
+
+			var svgData = _svgConverter.ExtractSvgImages(canvas);
 			var bitmapData = _pngConverter.Covert(svgData);
 			_serializer.Save("output/package.zip", nodes, bitmapData);
 

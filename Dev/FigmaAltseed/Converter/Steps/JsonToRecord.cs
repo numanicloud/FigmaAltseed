@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Numerics;
+using FigmaAltseed.Common;
 using FigmaAltseed.Records;
 using FigmaSharp;
 using FigmaSharp.Models;
@@ -13,12 +13,12 @@ namespace FigmaAltseed.Converter
 {
 	internal class JsonToRecord
 	{
-		public FigmaEmptyNode GetRecordTree(FigmaDocument document)
+		public FigmaEmptyNode GetRecordTree(FigmaCanvas canvas)
 		{
-			var canvas = document.children.First();
 			var nodes = canvas.children
 				.Select(ConvertRecursively3)
 				.ToArray();
+
 			return new FigmaEmptyNode() { Children = nodes };
 		}
 
@@ -28,15 +28,12 @@ namespace FigmaAltseed.Converter
 				.Select(ConvertRecursively3)
 				.ToArray();
 
-			if (pivot.visible)
+			if (pivot.visible && !pivot.IsAltTransform())
 			{
-				var bound = pivot is FigmaVector vector ? vector.absoluteBoundingBox
-					: pivot is FigmaFrame frame ? frame.absoluteBoundingBox
-					: new Rectangle(0, 0, 0, 0);
+				var bound = pivot.GetAbsoluteBounding() ?? new Rectangle(0, 0, 0, 0);
 
 				return new FigmaSpriteNode(pivot.GetImageAssetPath(),
-					new Vector2(bound.X, bound.Y),
-					new Vector2(bound.Width, bound.Height))
+					bound.Origin.ToDotNet(), bound.Size.ToDotNet())
 				{
 					Children = children,
 				};
