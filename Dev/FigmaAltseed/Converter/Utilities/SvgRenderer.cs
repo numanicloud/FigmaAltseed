@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using FigmaAltseed.Common;
 using FigmaSharp;
 using FigmaSharp.Models;
 using Svg;
-using static FigmaAltseed.Converter.ApplyResult;
+using static FigmaAltseed.Converter.Utilities.ApplyResult;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Utilities
 {
 	internal enum ApplyResult
 	{

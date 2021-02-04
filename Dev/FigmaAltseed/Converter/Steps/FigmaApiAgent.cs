@@ -3,7 +3,7 @@ using FigmaSharp;
 using FigmaSharp.Models;
 using AppContext = FigmaSharp.AppContext;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal class FigmaApiAgent
 	{

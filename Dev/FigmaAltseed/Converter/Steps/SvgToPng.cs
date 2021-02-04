@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using FigmaAltseed.Common;
 using Svg.Exceptions;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal record PngFileInfo(Bitmap Bitmap, string Path);
 

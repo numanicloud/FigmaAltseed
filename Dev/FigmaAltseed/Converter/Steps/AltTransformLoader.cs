@@ -5,7 +5,7 @@ using FigmaSharp;
 using FigmaSharp.Models;
 using Svg;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal class AltTransformLoader
 	{

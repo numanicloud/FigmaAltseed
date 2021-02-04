@@ -5,7 +5,7 @@ using FigmaSharp;
 using FigmaSharp.Models;
 using Color = System.Drawing.Color;
 
-namespace FigmaAltseed
+namespace FigmaAltseed.Common
 {
 	public static class Helper
 	{

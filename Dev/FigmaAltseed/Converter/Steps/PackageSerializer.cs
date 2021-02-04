@@ -5,7 +5,7 @@ using System.IO.Compression;
 using FigmaAltseed.Records;
 using Newtonsoft.Json;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal class PackageSerializer
 	{

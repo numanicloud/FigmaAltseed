@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FigmaAltseed.Common;
+using FigmaAltseed.Converter.Utilities;
 using FigmaSharp;
 using FigmaSharp.Models;
 using Svg;
+using SvgRenderer = FigmaAltseed.Converter.Utilities.SvgRenderer;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal record SvgFileInfo(SvgDocument Document, string FilePath);
 

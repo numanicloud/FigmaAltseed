@@ -9,7 +9,7 @@ using FigmaSharp.Models;
 using AppContext = FigmaSharp.AppContext;
 using File = System.IO.File;
 
-namespace FigmaAltseed.Converter
+namespace FigmaAltseed.Converter.Steps
 {
 	internal class JsonToRecord
 	{
