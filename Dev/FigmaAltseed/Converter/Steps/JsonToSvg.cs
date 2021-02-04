@@ -18,32 +18,25 @@ namespace FigmaAltseed.Converter
 			// Figma上で非表示のものは描画しない
 			// Fill が Image のものは描画しない
 
-			return figma.children.SelectMany(ExtractSvgImages);
+			return figma.children.Traverse(x => x.GetChildren<FigmaNode>())
+				.Where(x => x.visible)
+				.Select(ExtractSvgImage)
+				.FilterNull();
 		}
 
-		private IEnumerable<SvgFileInfo> ExtractSvgImages(FigmaNode pivot)
+		private SvgFileInfo? ExtractSvgImage(FigmaNode node)
 		{
-			var result = pivot.GetChildren<FigmaNode>()
-				.SelectMany(ExtractSvgImages);
-
-			if (!pivot.visible)
+			var doc = node switch
 			{
-				return result;
-			}
+				FigmaFrame f when RenderFrame(f) is { } svg => svg,
+				FigmaVector v when RenderVector(v) is { } svg => svg,
+				_ => null
+			};
 
-			if (pivot is FigmaFrame frame && RenderFrame2(frame) is {} svg1)
-			{
-				result = result.Append(new SvgFileInfo(svg1, pivot.GetImageAssetPath()));
-			}
-			else if (pivot is FigmaVector vector && RenderVector2(vector) is {} svg2)
-			{
-				result = result.Append(new SvgFileInfo(svg2, pivot.GetImageAssetPath()));
-			}
-
-			return result;
+			return doc is { } x ? new SvgFileInfo(x, node.GetImageAssetPath()) : null;
 		}
 
-		private SvgDocument? RenderVector2(FigmaVector node)
+		private SvgDocument? RenderVector(FigmaVector node)
 		{
 			if (node is FigmaText)
 			{
@@ -59,27 +52,17 @@ namespace FigmaAltseed.Converter
 				_renderer.ApplyCornerRadius(rect, rv.cornerRadius);
 			}
 
-			if (updated1.Merge(updated2) == ApplyResult.Changed)
-			{
-				return doc;
-			}
-
-			return null;
+			return updated1.Merge(updated2) == ApplyResult.Changed ? doc : null;
 		}
 
-		private SvgDocument? RenderFrame2(FigmaFrame node)
+		private SvgDocument? RenderFrame(FigmaFrame node)
 		{
 			var (doc, rect) = _renderer.CreateRectangleSvg(node.absoluteBoundingBox);
 			var updated1 = _renderer.ApplyFill(rect, node.fills);
 			var updated2 = _renderer.ApplyStroke(rect, node.strokes, node.strokeWeight);
 			_renderer.ApplyCornerRadius(rect, node.cornerRadius);
 
-			if (updated1.Merge(updated2) == ApplyResult.Changed)
-			{
-				return doc;
-			}
-
-			return null;
+			return updated1.Merge(updated2) == ApplyResult.Changed ? doc : null;
 		}
 	}
 }
