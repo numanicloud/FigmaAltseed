@@ -4,7 +4,7 @@ namespace FigmaAltseed.Records
 {
 	public class FigmaSpriteNode : FigmaAltseedNode
 	{
-		public string TextureId { get; }
+		public string TextureId { get; internal set; }
 		public Vector2 Position { get; }
 		public Vector2 SourceArea { get; }
 

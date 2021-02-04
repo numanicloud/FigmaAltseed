@@ -30,11 +30,12 @@ namespace FigmaAltseed.Converter
 			var figmaDocument = _apiAgent.Download(option) ?? throw new Exception("Figma APIからファイルを取得できませんでした。");
 			var canvas = figmaDocument.children[0];
 
+			var svgData = _svgConverter.ExtractSvgImages(canvas);
+			var bitmapData = _pngConverter.Covert(svgData);
+
 			var nodes = _recordConverter.GetRecordTree(canvas);
 			_altTransformLoader.Load(nodes, canvas);
 
-			var svgData = _svgConverter.ExtractSvgImages(canvas);
-			var bitmapData = _pngConverter.Covert(svgData);
 			_serializer.Save("output/package.zip", nodes, bitmapData);
 
 			Console.WriteLine("パッケージ作成完了");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,7 +17,7 @@ namespace FigmaAltseed.Converter.Steps
 		public FigmaEmptyNode GetRecordTree(FigmaCanvas canvas)
 		{
 			var nodes = canvas.children
-				.Select(ConvertRecursively3)
+				.Select(x => ConvertRecursively3(x))
 				.ToArray();
 
 			return new FigmaEmptyNode() { Children = nodes };
@@ -25,16 +26,17 @@ namespace FigmaAltseed.Converter.Steps
 		private FigmaAltseedNode ConvertRecursively3(FigmaNode pivot)
 		{
 			var children = pivot.GetChildren<FigmaNode>()
-				.Select(ConvertRecursively3)
+				.Select(x => ConvertRecursively3(x))
 				.ToArray();
 
 			if (pivot.visible && !pivot.IsAltTransform())
 			{
 				var bound = pivot.GetAbsoluteBounding() ?? new Rectangle(0, 0, 0, 0);
+				var imagePath = pivot.GetImageAssetPath();
 
-				return new FigmaSpriteNode(pivot.GetImageAssetPath(),
-					bound.Origin.ToDotNet(), bound.Size.ToDotNet())
+				return new FigmaSpriteNode(imagePath, bound.Origin.ToDotNet(), bound.Size.ToDotNet())
 				{
+					Name = pivot.name,
 					Children = children,
 				};
 			}
