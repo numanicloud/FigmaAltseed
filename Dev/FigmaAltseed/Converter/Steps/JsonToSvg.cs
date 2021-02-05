@@ -14,7 +14,7 @@ namespace FigmaAltseed.Converter.Steps
 	internal class JsonToSvg
 	{
 		private readonly SvgRenderer _renderer = new SvgRenderer();
-		
+
 		public IEnumerable<SvgFileInfo> ExtractSvgImages(FigmaCanvas figma)
 		{
 			// ルール： Fill または Strokeの存在する, Textではないノードのみを描画する

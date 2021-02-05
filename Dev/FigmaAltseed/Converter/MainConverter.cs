@@ -7,13 +7,13 @@ namespace FigmaAltseed.Converter
 	internal class MainConverter
 	{
 		private readonly FigmaApiAgent _apiAgent;
-		private readonly JsonToRecord _recordConverter;
+		private readonly JsonToRecord.Factory _recordConverter;
 		private readonly JsonToSvg _svgConverter;
 		private readonly SvgToPng _pngConverter;
 		private readonly PackageSerializer _serializer;
 		private readonly AltTransformLoader _altTransformLoader;
 
-		public MainConverter(FigmaApiAgent apiAgent, JsonToRecord recordConverter,
+		public MainConverter(FigmaApiAgent apiAgent, JsonToRecord.Factory recordConverter,
 			JsonToSvg svgConverter, SvgToPng pngConverter, PackageSerializer serializer,
 			AltTransformLoader altTransformLoader)
 		{
@@ -33,7 +33,7 @@ namespace FigmaAltseed.Converter
 			var svgData = _svgConverter.ExtractSvgImages(canvas);
 			var bitmapData = _pngConverter.Covert(svgData);
 
-			var nodes = _recordConverter.GetRecordTree(canvas);
+			var nodes = _recordConverter.Create(canvas).GetRecordTree();
 			_altTransformLoader.Load(nodes, canvas);
 
 			_serializer.Save("output/package.zip", nodes, bitmapData);

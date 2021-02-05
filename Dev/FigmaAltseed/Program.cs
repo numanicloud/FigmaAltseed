@@ -23,7 +23,7 @@ namespace FigmaAltseed
 					collection.AddHostedService<Startup>();
 
 					collection.AddSingleton<FigmaApiAgent>();
-					collection.AddSingleton<JsonToRecord>();
+					collection.AddSingleton<JsonToRecord.Factory>();
 					collection.AddSingleton<JsonToSvg>();
 					collection.AddSingleton<SvgToPng>();
 					collection.AddSingleton<PackageSerializer>();
