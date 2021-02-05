@@ -1,44 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
+using FigmaAltseed.Converter.Abstraction;
 using FigmaAltseed.Converter.Steps;
 using FigmaAltseed.Records;
+using FigmaSharp.Models;
 
 namespace FigmaAltseed.Converter
 {
 	internal class MainConverter
 	{
-		private readonly FigmaApiAgent _apiAgent;
-		private readonly JsonToRecord.Factory _recordConverter;
-		private readonly JsonToSvg _svgConverter;
-		private readonly SvgToPng _pngConverter;
 		private readonly PackageSerializer _serializer;
-		private readonly AltTransformLoader _altTransformLoader;
+		private readonly IPipelineFactory _factory = new PipelineFactory();
 
-		public MainConverter(FigmaApiAgent apiAgent, JsonToRecord.Factory recordConverter,
-			JsonToSvg svgConverter, SvgToPng pngConverter, PackageSerializer serializer,
-			AltTransformLoader altTransformLoader)
+		public MainConverter(PackageSerializer serializer)
 		{
-			_apiAgent = apiAgent;
-			_recordConverter = recordConverter;
-			_svgConverter = svgConverter;
-			_pngConverter = pngConverter;
 			_serializer = serializer;
-			_altTransformLoader = altTransformLoader;
 		}
 
 		public void ConvertToAltseed(StartupOption option)
 		{
-			var figmaDocument = _apiAgent.Download(option) ?? throw new Exception("Figma APIからファイルを取得できませんでした。");
-			var canvas = figmaDocument.children[0];
-
-			var svgData = _svgConverter.ExtractSvgImages(canvas);
-			var bitmapData = _pngConverter.Covert(svgData);
-
-			var nodes = _recordConverter.Create(canvas).GetRecordTree();
-			_altTransformLoader.Load(nodes, canvas);
-
-			_serializer.Save("output/package.zip", nodes, bitmapData);
+			var canvas = Canvas(option);
+			var symbols = Symbols(canvas);
+			var records = Records(canvas, symbols);
+			var svg = SvgData(canvas, symbols);
+			var png = PngData(svg);
+			var altTransform = AltTransform(canvas, records);
+			_serializer.Save("output/package.zip", records, png);
 
 			Console.WriteLine("パッケージ作成完了");
 		}
+
+		private FigmaEmptyNode AltTransform(FigmaCanvas canvas, FigmaEmptyNode records)
+			=> _factory.GetAltTransformStep(canvas, records).Supply();
+
+		private IEnumerable<PngFileInfo> PngData(IEnumerable<SvgFileInfo> svg) 
+			=> _factory.GetPngStep(svg).Supply();
+
+		private IEnumerable<SvgFileInfo> SvgData(FigmaCanvas canvas, ComponentSymbols symbols) 
+			=> _factory.GetSvgStep(canvas, symbols).Supply();
+
+		private FigmaEmptyNode Records(FigmaCanvas canvas, ComponentSymbols symbols) 
+			=> _factory.GetRecordStep(canvas, symbols).Supply();
+
+		private FigmaCanvas Canvas(StartupOption option)
+			=> _factory.GetCanvasStep(option).Supply();
+
+		private ComponentSymbols Symbols(FigmaCanvas canvas)
+			=> _factory.GetSymbolStep(canvas).Supply();
 	}
 }

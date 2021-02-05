@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using FigmaAltseed.Common;
+using FigmaAltseed.Converter.Abstraction;
 using Svg.Exceptions;
 
 namespace FigmaAltseed.Converter.Steps
