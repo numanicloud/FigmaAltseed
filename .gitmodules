@@ -1,3 +1,6 @@
 [submodule "Modules/FigmaSharp"]
 	path = Modules/FigmaSharp
 	url = https://github.com/microsoft/FigmaSharp.git
+[submodule "Modules/Deptorygen"]
+	path = Modules/Deptorygen
+	url = https://github.com/NumAniCloud/Deptorygen.git
