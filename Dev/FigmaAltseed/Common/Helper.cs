@@ -46,7 +46,7 @@ namespace FigmaAltseed.Common
 
 		public static string GetImageAssetPath(this FigmaNode node)
 		{
-			return node.id.Replace(":", "-").Replace(";", "_") + ".png";
+			return node.id.Replace(":", "-").Replace(";", "_").TrimStart('I') + ".png";
 		}
 
 		public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source)

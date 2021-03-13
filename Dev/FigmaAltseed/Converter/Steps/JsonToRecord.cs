@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FigmaAltseed.Common;
+using FigmaAltseed.Converter.Steps.Symbols;
 using FigmaAltseed.Records;
 using FigmaSharp;
 using FigmaSharp.Models;
@@ -10,10 +11,12 @@ namespace FigmaAltseed.Converter.Steps
 	internal class JsonToRecord
 	{
 		private readonly FigmaCanvas _canvas;
+		private readonly IVisualSymbols _components;
 
-		public JsonToRecord(FigmaCanvas canvas)
+		public JsonToRecord(FigmaCanvas canvas, IVisualSymbols components)
 		{
 			_canvas = canvas;
+			_components = components;
 		}
 
 		public FigmaEmptyNode GetRecordTree()
@@ -33,8 +36,10 @@ namespace FigmaAltseed.Converter.Steps
 
 			if (pivot.visible && !pivot.IsAltTransform())
 			{
+				var component = _components.GetMainSymbol(pivot);
+				var imagePath = (component is { } cmp ? cmp : pivot).GetImageAssetPath();
+
 				var bound = pivot.GetAbsoluteBounding() ?? new Rectangle(0, 0, 0, 0);
-				var imagePath = pivot.GetImageAssetPath();
 
 				return new FigmaSpriteNode(imagePath, bound.Origin.ToDotNet(), bound.Size.ToDotNet())
 				{
@@ -44,11 +49,6 @@ namespace FigmaAltseed.Converter.Steps
 			}
 
 			return new FigmaEmptyNode() {Children = children};
-		}
-
-		public class Factory
-		{
-			public JsonToRecord Create(FigmaCanvas canvas) => new(canvas);
 		}
 	}
 }

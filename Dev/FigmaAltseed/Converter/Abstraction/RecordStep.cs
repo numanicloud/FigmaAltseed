@@ -1,4 +1,5 @@
 ﻿using FigmaAltseed.Converter.Steps;
+using FigmaAltseed.Converter.Steps.Symbols;
 using FigmaAltseed.Records;
 using FigmaSharp.Models;
 
@@ -6,17 +7,16 @@ namespace FigmaAltseed.Converter.Abstraction
 {
 	internal class RecordStep : IPipelineStep<FigmaEmptyNode>
 	{
-		private readonly FigmaCanvas _canvas;
-		private readonly JsonToRecord.Factory _factory = new JsonToRecord.Factory();
+		private readonly JsonToRecord _jsonToRecord;
 
-		public RecordStep(FigmaCanvas canvas)
+		public RecordStep(FigmaCanvas canvas, IVisualSymbols components)
 		{
-			_canvas = canvas;
+			_jsonToRecord = new JsonToRecord(canvas, components);
 		}
 
 		public FigmaEmptyNode Supply()
 		{
-			return _factory.Create(_canvas).GetRecordTree();
+			return _jsonToRecord.GetRecordTree();
 		}
 	}
 }

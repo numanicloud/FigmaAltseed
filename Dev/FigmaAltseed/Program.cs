@@ -21,14 +21,8 @@ namespace FigmaAltseed
 				{
 					collection.Configure<StartupOption>(context.Configuration);
 					collection.AddHostedService<Startup>();
-
-					collection.AddSingleton<FigmaApiAgent>();
-					collection.AddSingleton<JsonToRecord.Factory>();
-					collection.AddSingleton<JsonToSvg>();
-					collection.AddSingleton<SvgToPng>();
 					collection.AddSingleton<PackageSerializer>();
 					collection.AddSingleton<MainConverter>();
-					collection.AddSingleton<AltTransformLoader>();
 				}).RunConsoleAsync();
 		}
 	}

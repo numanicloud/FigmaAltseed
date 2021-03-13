@@ -1,22 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FigmaAltseed.Common;
+using FigmaAltseed.Converter.Steps.Symbols;
 using FigmaSharp.Models;
 
 namespace FigmaAltseed.Converter.Steps
 {
-	internal class ComponentLoader
-	{
-		public void Load(FigmaCanvas canvas)
-		{
-			var symbols = canvas.TraverseFigma()
-				.Where(x => x.type == "COMPONENT")
-				.SelectMany(Helper.TraverseFigma)
-				.ToDictionary(x => x.id, x => x);
-		}
-	}
-
-	internal class ComponentSymbols
+	internal class ComponentSymbols : IVisualSymbols
 	{
 		private readonly FigmaCanvas _canvas;
 		private readonly Dictionary<string, FigmaNode> _cache = new();
@@ -28,29 +18,38 @@ namespace FigmaAltseed.Converter.Steps
 
 		public FigmaNode? GetMainSymbol(FigmaNode instanced)
 		{
-			return !instanced.id.StartsWith("I") ? instanced
-				: _cache.TryGet(instanced.id) is { } cached ? cached
+			return _cache.TryGet(GetSymbolKey(instanced)) is { } cached ? cached
 				: FindMainSymbol(instanced) is { } symbol ? symbol
 				: null;
 		}
 
+		private string GetSymbolKey(FigmaNode node)
+		{
+			return node.id.Split(";").Last();
+		}
+
 		private FigmaNode? FindMainSymbol(FigmaNode instanced)
 		{
+			if (instanced is FigmaInstance instance)
+			{
+				return _canvas.FindFirst<FigmaNode>(instance.componentId);
+			}
+
 			foreach (var pattern in SplitId(instanced.id))
 			{
 				// 最初に見つかったInstanceに対してコンポーネントを、そしてシンボルを突き止める
-				if (_canvas.FindFirst<FigmaInstance>(pattern.former) is not { } instance)
+				if (_canvas.FindFirst<FigmaInstance>(pattern.former) is null)
 				{
 					continue;
 				}
 
-				var symbolId = instance.componentId + ";" + pattern.latter;
+				var symbolId = GetSymbolKey(instanced);
 				var symbol = _canvas.FindFirst<FigmaNode>(symbolId)
 				             ?? _canvas.FindFirst<FigmaNode>("I" + symbolId);
 
 				if (symbol is not null)
 				{
-					_cache[instanced.id] = symbol;
+					_cache[symbolId] = symbol;
 				}
 
 				return symbol;
@@ -61,7 +60,7 @@ namespace FigmaAltseed.Converter.Steps
 
 		private IEnumerable<(string former, string latter)> SplitId(string id)
 		{
-			var split = id.Split(";");
+			var split = id.TrimStart('I').Split(";");
 
 			for (int i = 0; i < split.Length; i++)
 			{

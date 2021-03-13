@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FigmaAltseed.Common;
+using FigmaAltseed.Converter.Steps.Symbols;
 using FigmaAltseed.Converter.Utilities;
 using FigmaSharp;
 using FigmaSharp.Models;
@@ -13,16 +14,46 @@ namespace FigmaAltseed.Converter.Steps
 
 	internal class JsonToSvg
 	{
+		private readonly IVisualSymbols _components;
 		private readonly SvgRenderer _renderer = new SvgRenderer();
+
+		public JsonToSvg(IVisualSymbols components)
+		{
+			_components = components;
+		}
 
 		public IEnumerable<SvgFileInfo> ExtractSvgImages(FigmaCanvas figma)
 		{
 			// ルール： Fill または Strokeの存在する, Textではないノードのみを描画する
 			// Figma上で非表示のものは描画しない
 			// Fill が Image のものは描画しない
+			// コンポーネントのインスタンスであるノードは描画しない
 
-			return figma.children.Traverse(x => x.GetChildren<FigmaNode>())
+			var visibles = figma.children.Traverse(x => x.GetChildren<FigmaNode>())
 				.Where(x => x.visible)
+				.ToArray();
+
+			var componentIds = new List<string>();
+			var instances = new List<FigmaNode>();
+			var constants = new List<FigmaNode>();
+
+			foreach (var node in visibles)
+			{
+				if (_components.GetMainSymbol(node) is {} comp)
+				{
+					if (!componentIds.Contains(comp.id))
+					{
+						componentIds.Add(comp.id);
+						instances.Add(comp);
+					}
+				}
+				else
+				{
+					constants.Add(node);
+				}
+			}
+
+			return instances.Concat(constants)
 				.Select(ExtractSvgImage)
 				.FilterNull();
 		}
