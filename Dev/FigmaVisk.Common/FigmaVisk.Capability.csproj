@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Altseed2" Version="2.0.0-beta4" />
     <PackageReference Include="Visklusa.Abstraction" Version="1.0.0-alpha.2" />
+    <PackageReference Include="Visklusa.Notation.Json" Version="1.0.0-alpha.2" />
   </ItemGroup>
 
 </Project>
