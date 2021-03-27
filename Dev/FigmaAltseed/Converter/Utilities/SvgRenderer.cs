@@ -33,6 +33,7 @@ namespace FigmaAltseed.Converter.Utilities
 		}
 	}
 
+	[System.Runtime.InteropServices.Guid("01D0C180-2912-454B-849D-E7B9B93D961B")]
 	internal class SvgRenderer
 	{
 		public (SvgDocument document, SvgRectangle rectangle) CreateRectangleSvg(Rectangle bound)

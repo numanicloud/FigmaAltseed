@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FigmaVisk.Capability;
@@ -47,10 +49,26 @@ namespace ViskVectorRenderer
 		{
 			var layout = GetLayout();
 			var svg = new VectorRenderer();
+			var refMod = new ImageReferenceModifier();
 			var serializer = new Serializer();
 
-			var rendered = svg.Run(layout.Elements);
-			serializer.Save(rendered, outputPath);
+			var grouped = Group(layout.Elements);
+			var rendered = svg.RunGroup(grouped);
+			var modified = refMod.Apply(rendered);
+			serializer.Save(modified, outputPath);
+		}
+
+		private IEnumerable<Element[]> Group(Element[] elements)
+		{
+			return elements.GroupBy(x => x.GetCapability<Paint>())
+				.SelectMany(x => x.GroupBy(y => y.GetCapability<RoundedRectangle>()))
+				.SelectMany(
+					x => x.GroupBy(
+						y => y.GetCapability<BoundingBox>() is { } bound
+							? bound.Width * 197 + bound.Height * 331
+							: -1))
+				.Select(x => x.ToArray())
+				.ToArray();
 		}
 
 		private Layout GetLayout()

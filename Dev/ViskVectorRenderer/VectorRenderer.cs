@@ -7,8 +7,27 @@ using Visklusa.Abstraction.Notation;
 
 namespace ViskVectorRenderer
 {
+	// ElementをPaintの内容ごとにグループ化するステップ
+	// Elementに対する画像を生成するステップ
+	// Elementと画像パスを1対1対応にするステップ
+	// シリアライズ
+
 	internal class VectorRenderer
 	{
+		public IEnumerable<GroupRenderResult> RunGroup(IEnumerable<Element[]> grouped)
+		{
+			foreach (var elements in grouped)
+			{
+				var result = Run(elements.Take(1).ToArray()).First();
+				yield return result switch
+				{
+					SuccessRenderResult success =>
+						new ImageGroupRenderResult(elements, success.SvgDocument, success.FilePath),
+					_ => new SkipGroupRenderResult(elements),
+				};
+			}
+		}
+
 		public IEnumerable<RenderResult> Run(Element[] elements)
 		{
 			foreach (var element in elements)
@@ -29,10 +48,7 @@ namespace ViskVectorRenderer
 			if (element.GetCapability<BoundingBox>() is not {} bound
 				|| (paint.Fill == Fill.Blank && paint.Stroke == Stroke.Blank))
 			{
-				var caps = element.Capabilities.ToList();
-				caps.Remove(paint);
-				var elm = new Element(element.Id, caps.ToArray());
-				return new SkipRenderResult(elm);
+				return new SkipRenderResult(element);
 			}
 
 			var doc = new SvgDocument()
@@ -56,12 +72,7 @@ namespace ViskVectorRenderer
 
 			doc.Children.Add(rectangle);
 
-			var newCaps = element.Capabilities
-				.Append(new FigmaVisk.Capability.Image($"rendered_{element.Id}"))
-				.ToArray();
-			var newElement = element with {Capabilities = newCaps };
-
-			return new SuccessRenderResult(newElement, doc);
+			return new SuccessRenderResult(element, doc, $"rendered_{element.Id}.png");
 		}
 
 		private SvgUnit Pixel(float value)

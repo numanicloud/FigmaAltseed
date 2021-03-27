@@ -15,7 +15,7 @@ namespace ViskVectorRenderer
 {
 	internal class Serializer
 	{
-		public void Save(IEnumerable<RenderResult> results, string outputPath)
+		public void Save(IEnumerable<GroupRenderResult> results, string outputPath)
 		{
 			var resultArray = results.ToArray();
 			var repo = new JsonCapabilityRepository();
@@ -28,24 +28,23 @@ namespace ViskVectorRenderer
 
 			foreach (var renderResult in resultArray)
 			{
-				if (renderResult is SuccessRenderResult success)
+				if (renderResult is ImageGroupRenderResult image)
 				{
 					Bitmap bitmap;
 					try
 					{
-						bitmap = success.SvgDocument.Draw();
+						bitmap = image.SvgDocument.Draw();
 					}
 					catch (SvgMemoryException memoryException)
 					{
-						Console.WriteLine($"{memoryException}; ElementId={renderResult.Element.Id}");
+						Console.WriteLine($"{memoryException}; Name={image.FilePath}");
 						continue;
 					}
 
 					using var memoryStream = new MemoryStream();
 					bitmap.Save(memoryStream, ImageFormat.Png);
-
-					var path = $"rendered_{renderResult.Element.Id}";
-					serializer.AddAsset(memoryStream.GetBuffer(), path);
+					
+					serializer.AddAsset(memoryStream.GetBuffer(), image.FilePath);
 				}
 			}
 
@@ -56,7 +55,7 @@ namespace ViskVectorRenderer
 						{
 							BoundingBox.Id, ZOffset.Id, Paint.Id, Image.Id
 						}),
-					resultArray.Select(x => x.Element).ToArray()));
+					resultArray.SelectMany(x => x.Elements).ToArray()));
 		}
 	}
 }

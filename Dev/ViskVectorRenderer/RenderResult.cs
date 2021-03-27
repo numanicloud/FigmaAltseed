@@ -3,32 +3,10 @@ using Visklusa.Abstraction.Notation;
 
 namespace ViskVectorRenderer
 {
-	internal abstract class RenderResult
-	{
-		protected RenderResult(Element element)
-		{
-			Element = element;
-		}
+	internal abstract record RenderResult(Element Element);
 
-		public Element Element { get; set; }
-	}
+	internal record SuccessRenderResult(Element Element, SvgDocument SvgDocument, string FilePath)
+		: RenderResult(Element);
 
-	internal class SuccessRenderResult : RenderResult
-	{
-		public SuccessRenderResult(Element element, SvgDocument svgDocument)
-			: base(element)
-		{
-			SvgDocument = svgDocument;
-		}
-
-		public SvgDocument SvgDocument { get; set; }
-	}
-
-	internal class SkipRenderResult : RenderResult
-	{
-		public SkipRenderResult(Element element)
-			: base(element)
-		{
-		}
-	}
+	internal record SkipRenderResult(Element Element) : RenderResult(Element);
 }
