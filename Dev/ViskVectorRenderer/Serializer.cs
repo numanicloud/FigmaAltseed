@@ -4,9 +4,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using FigmaVisk.Capability;
 using Svg.Exceptions;
 using Visklusa.Abstraction.Notation;
+using Visklusa.IO;
 using Visklusa.JsonZip;
 using Visklusa.Notation.Json;
 using Image = FigmaVisk.Capability.Image;
@@ -21,10 +23,18 @@ namespace ViskVectorRenderer
 			var repo = new JsonCapabilityRepository();
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
-			repo.Register(new JsonCapabilityBase<Paint>(Paint.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 
-			using var serializer = ViskJzFactory.GetSaver(outputPath, repo);
+			var variant = new JsonZipVariant(outputPath, repo);
+			variant.SetOptionModifier(
+				option =>
+				{
+					var result = new JsonSerializerOptions(option);
+					result.IgnoreReadOnlyProperties = true;
+					return result;
+				});
+
+			using var serializer = new VisklusaSaver(variant);
 
 			foreach (var renderResult in resultArray)
 			{
@@ -53,7 +63,7 @@ namespace ViskVectorRenderer
 					new CapabilityAssertion(
 						new[]
 						{
-							BoundingBox.Id, ZOffset.Id, Paint.Id, Image.Id
+							BoundingBox.Id, ZOffset.Id, Image.Id
 						}),
 					resultArray.SelectMany(x => x.Elements).ToArray()));
 		}

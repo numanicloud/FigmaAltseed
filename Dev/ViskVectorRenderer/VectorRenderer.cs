@@ -70,6 +70,15 @@ namespace ViskVectorRenderer
 				rectangle.CornerRadiusY = Pixel(rounded.LeftBottom);
 			}
 
+			if (paint.Stroke != Stroke.Blank)
+			{
+				var wpx = Pixel(paint.Stroke.Weight);
+				rectangle.X += wpx / 2;
+				rectangle.Y += wpx / 2;
+				doc.Width += wpx;
+				doc.Height += wpx;
+			}
+
 			doc.Children.Add(rectangle);
 
 			return new SuccessRenderResult(element, doc, $"rendered_{element.Id}.png");

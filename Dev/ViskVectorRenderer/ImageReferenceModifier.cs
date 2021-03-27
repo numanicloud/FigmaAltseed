@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FigmaVisk.Capability;
+using Visklusa.Abstraction.Notation;
 
 namespace ViskVectorRenderer
 {
@@ -16,10 +17,11 @@ namespace ViskVectorRenderer
 						.Select(
 							element =>
 							{
-								var newCaps = element.Capabilities
-									.Append(new Image(image.FilePath))
-									.ToArray();
-								return element with { Capabilities = newCaps };
+								var list = new List<ICapability>(element.Capabilities);
+								list.Add(new Image(image.FilePath));
+								list.RemoveAll(x => x is RoundedRectangle);
+								list.RemoveAll(x => x is Paint);
+								return element with { Capabilities = list.ToArray() };
 							})
 						.ToArray();
 					yield return new ImageGroupRenderResult(
