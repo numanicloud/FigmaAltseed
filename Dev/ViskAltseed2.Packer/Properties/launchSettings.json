@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ViskAltseed2.Packer": {
+      "commandName": "Project",
+      "commandLineArgs": "PackagePath=\"rendered.viskjz\" OutputPath=\"resource.viskja\""
+    }
+  }
+}

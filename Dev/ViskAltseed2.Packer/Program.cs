@@ -1,12 +1,27 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using Altseed2;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ViskAltseed2.Packer
 {
 	class Program
 	{
-		static void Main(string[] args)
+		public const string AppName = "ViskAltseed2.Packer";
+
+		static async Task Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			await Host.CreateDefaultBuilder(args)
+				.ConfigureAppConfiguration(builder =>
+				{
+					builder.AddCommandLine(args);
+				})
+				.ConfigureServices((context, collection) =>
+				{
+					collection.Configure<StartupOption>(context.Configuration);
+					collection.AddHostedService<ConvertMain>();
+				}).RunConsoleAsync();
 		}
 	}
 }
