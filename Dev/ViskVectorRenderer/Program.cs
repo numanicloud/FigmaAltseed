@@ -5,11 +5,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace ViskVectorRenderer
 {
-	class Program
+	public class Program
 	{
 		public const string AppName = "ViskVectorRenderer";
 
-		static async Task Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			await Host.CreateDefaultBuilder(args)
 				.ConfigureAppConfiguration(

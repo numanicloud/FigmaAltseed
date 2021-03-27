@@ -64,7 +64,7 @@ namespace FigmaVisk
 			repo.Register(new JsonCapabilityBase<Paint>(Paint.Id));
 			repo.Register(new JsonCapabilityBase<RoundedRectangle>(RoundedRectangle.Id));
 
-			var variant = new JsonZipVariant("package.viskjz", repo);
+			var variant = new JsonZipVariant(_option.OutputPath, repo);
 			variant.SetOptionModifier(
 				option =>
 				{
