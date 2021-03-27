@@ -1,8 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Altseed2" Version="2.0.0-beta1" />
+    <PackageReference Include="Visklusa.IO" Version="1.0.0-alpha.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FigmaVisk.Common\FigmaVisk.Capability.csproj" />
+    <ProjectReference Include="..\Visklusa.JsonAltseed\Visklusa.JsonAltseed.csproj" />
+  </ItemGroup>
 
 </Project>
