@@ -1,12 +1,29 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ViskVectorRenderer
 {
 	class Program
 	{
-		static void Main(string[] args)
+		public const string AppName = "ViskVectorRenderer";
+
+		static async Task Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			await Host.CreateDefaultBuilder(args)
+				.ConfigureAppConfiguration(
+					builder =>
+					{
+						builder.AddCommandLine(args);
+					})
+				.ConfigureServices(
+					(context, collection) =>
+					{
+						collection.Configure<StartupOption>(context.Configuration);
+						collection.AddHostedService<ConvertMain>();
+					})
+				.RunConsoleAsync();
 		}
 	}
 }

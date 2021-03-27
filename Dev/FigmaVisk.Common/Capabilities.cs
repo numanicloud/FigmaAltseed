@@ -35,10 +35,19 @@ namespace FigmaVisk.Capability
 		public const string Id = "FigmaVisk.RoundedRectangle";
 		public string CapabilityId => Id;
 
+		public RoundedRectangle() : this(0, 0, 0, 0)
+		{
+		}
+
 		public RoundedRectangle(float radius)
 			: this(radius, radius, radius, radius)
 		{
-			
 		}
+	}
+
+	public record Image(string AssetPath) : ICapability
+	{
+		public const string Id = "FigmaVisk.Image";
+		public string CapabilityId => Id;
 	}
 }

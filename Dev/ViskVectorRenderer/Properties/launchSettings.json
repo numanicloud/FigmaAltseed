@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ViskVectorRenderer": {
+      "commandName": "Project",
+      "commandLineArgs": "PackagePath=\"package.viskjz\" OutputPath=\"rendered.viskjz\""
+    }
+  }
+}
