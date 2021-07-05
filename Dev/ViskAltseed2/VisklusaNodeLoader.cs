@@ -20,6 +20,8 @@ namespace ViskAltseed2
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
+			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
+			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 
 			var variant = new JsonAltseedVariant(visklusaPath, repo);
 			using var loader = new VisklusaLoader(variant);
@@ -73,6 +75,8 @@ namespace ViskAltseed2
 				textNode.ZOrder = (int) zOffset.Z;
 			}
 
+			SetCommonCapability(element, textNode);
+
 			return textNode;
 		}
 
@@ -89,7 +93,17 @@ namespace ViskAltseed2
 				spriteNode.ZOrder = (int) zOffset.Z;
 			}
 
+			SetCommonCapability(element, spriteNode);
+
 			return spriteNode;
+		}
+
+		private static void SetCommonCapability(Element element, Node node)
+		{
+			if (element.GetCapability<AltPosition>() is { } alt)
+			{
+				node.AddChildNode(new AltPositionTagNode(new Vector2F(alt.X, alt.Y)));
+			}
 		}
 	}
 
