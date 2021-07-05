@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using FigmaVisk.Entry;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +19,10 @@ namespace FigmaVisk
 				})
 				.ConfigureServices((context, collection) =>
 				{
+					collection.AddSingleton<Converter>();
+					collection.AddSingleton<DocumentAnalyzer>();
+					collection.AddSingleton<FigmaApiAgent>();
+					collection.AddSingleton<AltTransformAnalyzer>();
 					collection.Configure<StartupOption>(context.Configuration);
 					collection.AddHostedService<ConvertMain>();
 				}).RunConsoleAsync();

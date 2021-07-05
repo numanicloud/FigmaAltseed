@@ -59,11 +59,6 @@ namespace FigmaVisk
 
 			yield return new Text(text.characters, text.style.fontFamily, text.style.fontSize, GetFill(new FigmaBox(text)));
 			yield return new ZOffset(context.Depth);
-
-			if (text.name.EndsWith("@AltPosition"))
-			{
-				yield return new AltPosition(bound.X, bound.Y);
-			}
 		}
 
 		private IEnumerable<ICapability> GetCapabilities(FigmaBox box, RecursiveContext context)
@@ -82,11 +77,6 @@ namespace FigmaVisk
 				}
 
 				yield return new ZOffset(context.Depth);
-			}
-
-			if (box.Name.EndsWith("@AltPosition"))
-			{
-				yield return new AltPosition(bound.X, bound.Y);
 			}
 		}
 

@@ -10,25 +10,32 @@ namespace FigmaVisk
 		public Element[] Convert(Element[] source)
 		{
 			var list = new List<Element>(source);
+
 			var alts = new List<(Element, AltPosition, string name)>();
 			foreach (var element in source)
 			{
-				if (element.GetCapability<AltPosition>() is {} alt
-					&& element.GetCapability<FigmaId>() is {} id)
+				if (element.GetCapability<FigmaId>() is {} id
+					&& id.Name.EndsWith("@AltPosition")
+					&& element.GetCapability<BoundingBox>() is {} box)
 				{
+					var capability = new AltPosition(box.X, box.Y);
+					var matchName = id.Name.Replace("@AltPosition", "");
+
 					list.Remove(element);
-					alts.Add((element, alt, id.Name));
+					alts.Add((element, capability, matchName));
 				}
 			}
 
 			var replaces = new List<(Element, AltPosition)>();
-			foreach (var item in source)
+			foreach (var element in source)
 			{
-				if (item.GetCapability<AltPosition>() is null
-					&& item.GetCapability<FigmaId>() is { } id
-					&& alts.FirstOrDefault(k => k.name == id.Name) is {} alt)
+				if (element.GetCapability<AltPosition>() is null
+					&& element.GetCapability<FigmaId>() is { } id
+					&& alts.FirstOrDefault(k => k.name == id.Name) is {} alt
+					&& alt != default)
 				{
-					replaces.Add((item, alt.Item2));
+					list.Remove(element);
+					replaces.Add((element, alt.Item2));
 				}
 			}
 
