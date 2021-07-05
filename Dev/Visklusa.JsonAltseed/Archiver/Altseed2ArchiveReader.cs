@@ -7,14 +7,12 @@ namespace Visklusa.JsonAltseed.Archiver
 	{
 		public Altseed2ArchiveReader(string archivePath)
 		{
-			Engine.Initialize(nameof(Altseed2ArchiveReader), 640, 480);
 			Engine.File.AddRootPackage(archivePath);
 		}
 
 		public void Dispose()
 		{
 			Engine.File.ClearRootDirectories();
-			Engine.Terminate();
 		}
 
 		public IAssetReader GetAsset(string filePath)

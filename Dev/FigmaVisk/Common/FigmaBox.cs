@@ -11,6 +11,7 @@ namespace FigmaVisk
 		public FigmaPaint? Stroke { get; }
 		public int StrokeWeight { get; }
 		public float CornerRadius { get; }
+		public string Name { get; }
 
 		public FigmaBox(FigmaVector vector)
 		{
@@ -18,6 +19,7 @@ namespace FigmaVisk
 			Paint = vector.fills.FirstOrDefault();
 			Stroke = vector.strokes.FirstOrDefault();
 			StrokeWeight = vector.strokeWeight;
+			Name = vector.name;
 
 			CornerRadius = vector is RectangleVector rect ? rect.cornerRadius : 0;
 		}
@@ -29,6 +31,7 @@ namespace FigmaVisk
 			Stroke = frame.strokes.FirstOrDefault();
 			StrokeWeight = frame.strokeWeight;
 			CornerRadius = frame.cornerRadius;
+			Name = frame.name;
 		}
 	}
 }

@@ -24,6 +24,7 @@ namespace ViskVectorRenderer
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
+			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
 
 			var variant = new JsonZipVariant(outputPath, repo);
 			variant.SetOptionModifier(
@@ -63,7 +64,7 @@ namespace ViskVectorRenderer
 					new CapabilityAssertion(
 						new[]
 						{
-							BoundingBox.Id, ZOffset.Id, Image.Id
+							BoundingBox.Id, ZOffset.Id, Image.Id, Text.Id
 						}),
 					resultArray.SelectMany(x => x.Elements).ToArray()));
 		}

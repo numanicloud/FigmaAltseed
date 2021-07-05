@@ -15,13 +15,11 @@ namespace Visklusa.JsonAltseed.Archiver
 			_tmpDirPath = archivePath + "_tmp.tmp";
 
 			Directory.CreateDirectory(_tmpDirPath);
-			Engine.Initialize(nameof(Altseed2ArchiveWriter), 640, 480);
 		}
 
 		public void Dispose()
 		{
 			Engine.File.Pack(_tmpDirPath, _archivePath);
-			Engine.Terminate();
 			Directory.Delete(_tmpDirPath, true);
 		}
 

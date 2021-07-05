@@ -63,6 +63,7 @@ namespace FigmaVisk
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
 			repo.Register(new JsonCapabilityBase<Paint>(Paint.Id));
 			repo.Register(new JsonCapabilityBase<RoundedRectangle>(RoundedRectangle.Id));
+			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
 
 			var variant = new JsonZipVariant(_option.OutputPath, repo);
 			variant.SetOptionModifier(
@@ -78,7 +79,7 @@ namespace FigmaVisk
 			visk.AddLayout(new Layout(
 				new CapabilityAssertion(new []
 				{
-					BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id
+					BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id, Text.Id
 				}), elements));
 		}
 	}

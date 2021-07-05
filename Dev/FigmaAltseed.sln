@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FigmaConverter", "FigmaConv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FigmaAltseed2", "FigmaAltseed2\FigmaAltseed2.csproj", "{4C9F2EA9-0412-484B-8C94-7C22208B66EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FigmaAltseed2.Try", "FigmaAltseed2.Try\FigmaAltseed2.Try.csproj", "{36332D44-BA0B-47FD-A326-2111B6029433}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{4C9F2EA9-0412-484B-8C94-7C22208B66EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C9F2EA9-0412-484B-8C94-7C22208B66EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C9F2EA9-0412-484B-8C94-7C22208B66EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36332D44-BA0B-47FD-A326-2111B6029433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36332D44-BA0B-47FD-A326-2111B6029433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36332D44-BA0B-47FD-A326-2111B6029433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36332D44-BA0B-47FD-A326-2111B6029433}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

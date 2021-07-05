@@ -50,4 +50,22 @@ namespace FigmaVisk.Capability
 		public const string Id = "FigmaVisk.Image";
 		public string CapabilityId => Id;
 	}
+
+	public record Text(string Content, string FontFamily, int FontSize, Fill Fill) : ICapability
+	{
+		public const string Id = "FigmaVisk.Text";
+		public string CapabilityId => Id;
+	}
+
+	public record AltPosition(float X, float Y) : ICapability
+	{
+		public const string Id = "FigmaVisk.AltPosition";
+		public string CapabilityId => Id;
+	}
+
+	public record FigmaId(string NodeId, string Name) : ICapability
+	{
+		public const string Id = "FigmaVisk.FigmaId";
+		public string CapabilityId => Id;
+	}
 }

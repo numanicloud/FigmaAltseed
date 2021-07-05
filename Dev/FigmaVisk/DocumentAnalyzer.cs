@@ -32,20 +32,38 @@ namespace FigmaVisk
 
 		private Element? Convert(FigmaNode node, RecursiveContext context)
 		{
-			var box = node is FigmaVector vector ? new FigmaBox(vector)
-				: node is FigmaFrame frame ? new FigmaBox(frame)
-				: null;
-
-			if (box is null)
+			if (!node.visible)
 			{
 				return null;
 			}
 
-			var capabilities = GetCapabilities(box, context).ToArray();
-
-			return capabilities.Any()
-				? new Element(context.NextId, capabilities)
+			var caps = (node switch
+			{
+				FigmaText text => GetCapabilities(text, context),
+				FigmaVector vector => GetCapabilities(new FigmaBox(vector), context),
+				FigmaFrame frame => GetCapabilities(new FigmaBox(frame), context),
+				_ => new ICapability[0],
+			})
+				.Append(new FigmaId(node.id, node.name))
+				.ToArray();
+			
+			return caps.Any()
+				? new Element(context.NextId, caps)
 				: null;
+		}
+
+		private IEnumerable<ICapability> GetCapabilities(FigmaText text, RecursiveContext context)
+		{
+			var bound = text.absoluteBoundingBox;
+			yield return new BoundingBox(bound.X, bound.Y, bound.Width, bound.Height);
+
+			yield return new Text(text.characters, text.style.fontFamily, text.style.fontSize, GetFill(new FigmaBox(text)));
+			yield return new ZOffset(context.Depth);
+
+			if (text.name.EndsWith("@AltPosition"))
+			{
+				yield return new AltPosition(bound.X, bound.Y);
+			}
 		}
 
 		private IEnumerable<ICapability> GetCapabilities(FigmaBox box, RecursiveContext context)
@@ -64,6 +82,11 @@ namespace FigmaVisk
 				}
 
 				yield return new ZOffset(context.Depth);
+			}
+
+			if (box.Name.EndsWith("@AltPosition"))
+			{
+				yield return new AltPosition(bound.X, bound.Y);
 			}
 		}
 

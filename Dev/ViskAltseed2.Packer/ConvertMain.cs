@@ -56,7 +56,8 @@ namespace ViskAltseed2.Packer
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
-
+			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
+				
 			var zipJson = new JsonZipVariant(packagePath, repo);
 			zipJson.SetOptionModifier(
 				options =>
@@ -67,11 +68,16 @@ namespace ViskAltseed2.Packer
 				});
 			var zipAltseed = new JsonAltseedVariant(outputPath, repo);
 
-			using var loader = new VisklusaLoader(zipJson);
-			using var saver = new VisklusaSaver(zipAltseed);
 
-			var (layout, assets) = Load(loader);
-			Save(saver, layout, assets);
+			Altseed2.Engine.Initialize("Hoge", 100, 100);
+			{
+				using var loader = new VisklusaLoader(zipJson);
+				using var saver = new VisklusaSaver(zipAltseed);
+
+				var (layout, assets) = Load(loader);
+				Save(saver, layout, assets);
+			}
+			Altseed2.Engine.Terminate();
 		}
 
 		private static void Save(VisklusaSaver saver, Layout layout, IEnumerable<IAssetReader> assets)
