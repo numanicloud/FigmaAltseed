@@ -1,7 +1,7 @@
-﻿using System;
+﻿using FigmaVisk.Capability;
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using FigmaVisk.Capability;
 using Visklusa.Abstraction.Notation;
 using Visklusa.IO;
 using Visklusa.JsonZip;
@@ -44,7 +44,7 @@ namespace FigmaVisk.Entry
 			return elements;
 		}
 
-		private static JsonCapabilityRepository? GetCapabilityRepo()
+		private static JsonCapabilityRepository GetCapabilityRepo()
 		{
 			var repo = new JsonCapabilityRepository();
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
@@ -54,10 +54,11 @@ namespace FigmaVisk.Entry
 			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
+			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
 			return repo;
 		}
 
-		private static JsonZipVariant GetVariant(StartupOption option, JsonCapabilityRepository? repo)
+		private static JsonZipVariant GetVariant(StartupOption option, JsonCapabilityRepository repo)
 		{
 			var variant = new JsonZipVariant(option.OutputPath, repo);
 			variant.SetOptionModifier(sOption =>
@@ -76,7 +77,7 @@ namespace FigmaVisk.Entry
 			visk.AddLayout(new Layout(new CapabilityAssertion(new[]
 			{
 				BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id, Text.Id, FigmaId.Id,
-				AltPosition.Id
+				AltPosition.Id, FamilyShip.Id
 			}), elements));
 		}
 	}

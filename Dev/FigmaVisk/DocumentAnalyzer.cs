@@ -17,11 +17,22 @@ namespace FigmaVisk
 
 			var context = new RecursiveContext(0, 0);
 			return canvas.Traverse(
-					(node, depth) =>
+					(node, parent, depth) =>
 					{
 						context = context with { Depth = depth };
 
 						var element = Convert(node, context);
+
+						// 親子情報を登録
+						if (element is {} && parent is {})
+						{
+							element = element with
+							{
+								Capabilities = element.Capabilities
+									.Append(new FamilyShip(parent.id))
+									.ToArray()
+							};
+						}
 
 						context = context with { NextId = context.NextId + 1 };
 

@@ -6,22 +6,24 @@ using System.Linq;
 
 namespace FigmaVisk
 {
+	public delegate TResult ResultSelector<out TResult>(FigmaNode node, FigmaNode? parent, int depth);
+
 	public static class Helpers
 	{
 		public static IEnumerable<TResult> Traverse<TResult>
-			(this FigmaCanvas canvas, Func<FigmaNode, int, TResult> selector)
+			(this FigmaCanvas canvas, ResultSelector<TResult> selector)
 		{
-			return canvas.children.SelectMany(x => Traverse(x, selector, 0));
+			return canvas.children.SelectMany(x => Traverse(x, selector, 0, null));
 		}
 
 		public static IEnumerable<TResult> Traverse<TResult>
-			(this FigmaNode pivot, Func<FigmaNode, int, TResult> selector, int depth)
+			(this FigmaNode pivot, ResultSelector<TResult> selector, int depth, FigmaNode? parent)
 		{
-			yield return selector(pivot, depth);
+			yield return selector(pivot, parent, depth);
 
 			foreach (var child in pivot.GetChildren<FigmaNode>())
 			{
-				foreach (var node in Traverse(child, selector, depth + 1))
+				foreach (var node in Traverse(child, selector, depth + 1, pivot))
 				{
 					yield return node;
 				}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Altseed2;
 using FigmaVisk.Capability;
@@ -22,12 +23,21 @@ namespace ViskAltseed2
 			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
+			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
 
 			var variant = new JsonAltseedVariant(visklusaPath, repo);
 			using var loader = new VisklusaLoader(variant);
 
 			var layout = loader.GetLayout();
-			return layout.Elements.Select(ToNode).FilterNull().ToArray();
+			var analyzed = layout.Elements
+				.Select(x => ToNode(x).WithElement(x))
+				.FilterNull()
+				.ToArray();
+
+			var parentLoader = new ParentInfoLoader(analyzed);
+			parentLoader.ApplyFamilyShip();
+
+			return analyzed.Select(x => x.Node).ToArray();
 		}
 
 		public void RegisterFont(string fontFamilyName, int fontSize, Font font)
@@ -104,6 +114,8 @@ namespace ViskAltseed2
 			{
 				node.AddChildNode(new AltPositionTagNode(new Vector2F(alt.X, alt.Y)));
 			}
+
+
 		}
 	}
 
@@ -118,6 +130,11 @@ namespace ViskAltseed2
 					yield return item;
 				}
 			}
+		}
+
+		internal static NodeAnalysis? WithElement(this Node? node, Element element)
+		{
+			return node is {} ? new(element, node) : null;
 		}
 	}
 }

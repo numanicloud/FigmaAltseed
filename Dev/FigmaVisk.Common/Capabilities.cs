@@ -68,4 +68,10 @@ namespace FigmaVisk.Capability
 		public const string Id = "FigmaVisk.FigmaId";
 		public string CapabilityId => Id;
 	}
+
+	public record FamilyShip(string ParentsNodeId) : ICapability
+	{
+		public const string Id = "FigmaVisk.FamilyShip";
+		public string CapabilityId => Id;
+	}
 }

@@ -80,6 +80,9 @@ namespace ViskVectorRenderer
 			repo.Register(new JsonCapabilityBase<RoundedRectangle>(RoundedRectangle.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
+			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
+			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
+			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 
 			using var source = ViskJzFactory.GetLoader(_options.PackagePath, repo);
 
