@@ -23,13 +23,13 @@ namespace ViskAltseed2
 			{
 				if (item.Value.Source.GetCapability<FamilyShip>() is { } family)
 				{
-					var parent = _nodes[family.ParentsNodeId].Node;
+					var parent = _nodes[family.ParentsNodeId];
 					var it = item.Value.Node;
 
-					parent.AddChildNode(it);
-					if (parent is TransformNode p && it is TransformNode i)
+					parent.Node.AddChildNode(it);
+					if (parent.Source.GetCapability<BoundingBox>() is {} box && it is TransformNode i)
 					{
-						i.Position -= p.Position;
+						i.Position -= new Vector2F(box.X , box.Y);
 					}
 				}
 			}

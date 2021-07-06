@@ -24,7 +24,7 @@ namespace FigmaVisk
 						var element = Convert(node, context);
 
 						// 親子情報を登録
-						if (element is {} && parent is {})
+						if (parent is {})
 						{
 							element = element with
 							{
@@ -41,13 +41,8 @@ namespace FigmaVisk
 				.FilterNull().ToArray();
 		}
 
-		private Element? Convert(FigmaNode node, RecursiveContext context)
+		private Element Convert(FigmaNode node, RecursiveContext context)
 		{
-			if (!node.visible)
-			{
-				return null;
-			}
-
 			var caps = (node switch
 			{
 				FigmaText text => GetCapabilities(text, context),
@@ -58,9 +53,7 @@ namespace FigmaVisk
 				.Append(new FigmaId(node.id, node.name))
 				.ToArray();
 			
-			return caps.Any()
-				? new Element(context.NextId, caps)
-				: null;
+			return new Element(context.NextId, caps);
 		}
 
 		private IEnumerable<ICapability> GetCapabilities(FigmaText text, RecursiveContext context)

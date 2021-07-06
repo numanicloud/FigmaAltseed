@@ -45,21 +45,28 @@ namespace ViskAltseed2
 			_fonts[(fontFamilyName, fontSize)] = font;
 		}
 
-		private Node? ToNode(Element element)
+		private Node ToNode(Element element)
 		{
-			if (element.GetCapability<Image>() is {} image
-				&& element.GetCapability<BoundingBox>() is {} bound)
+			if (element.GetCapability<BoundingBox>() is { } box)
 			{
-				return CreateSpriteNode(element, bound, image);
+				if (element.GetCapability<Image>() is { } image)
+				{
+					return CreateSpriteNode(element, box, image);
+				}
+
+				if (element.GetCapability<Text>() is { } text)
+				{
+					return CreateTextNode(element, text, box);
+				}
+
+				return new TransformNode()
+				{
+					Position = new Vector2F(box.X, box.Y)
+				};
+
 			}
 
-			if (element.GetCapability<Text>() is {} text
-				&& element.GetCapability<BoundingBox>() is {} bound2)
-			{
-				return CreateTextNode(element, text, bound2);
-			}
-
-			return null;
+			return new Node();
 		}
 
 		private Node CreateTextNode(Element element, Text text, BoundingBox bound2)
@@ -74,15 +81,15 @@ namespace ViskAltseed2
 				Position = new Vector2F(bound2.X, bound2.Y),
 				Text = text.Content,
 				Font = f,
-				Color = new Color((byte) (fill.Red * 255),
-					(byte) (fill.Green * 255),
-					(byte) (fill.Blue * 255),
-					(byte) (fill.Alpha * 255)),
+				Color = new Color((byte)(fill.Red * 255),
+					(byte)(fill.Green * 255),
+					(byte)(fill.Blue * 255),
+					(byte)(fill.Alpha * 255)),
 			};
 
 			if (element.GetCapability<ZOffset>() is { } zOffset)
 			{
-				textNode.ZOrder = (int) zOffset.Z;
+				textNode.ZOrder = (int)zOffset.Z;
 			}
 
 			SetCommonCapability(element, textNode);
@@ -100,7 +107,7 @@ namespace ViskAltseed2
 
 			if (element.GetCapability<ZOffset>() is { } zOffset)
 			{
-				spriteNode.ZOrder = (int) zOffset.Z;
+				spriteNode.ZOrder = (int)zOffset.Z;
 			}
 
 			SetCommonCapability(element, spriteNode);
@@ -134,7 +141,7 @@ namespace ViskAltseed2
 
 		internal static NodeAnalysis? WithElement(this Node? node, Element element)
 		{
-			return node is {} ? new(element, node) : null;
+			return node is { } ? new(element, node) : null;
 		}
 	}
 }

@@ -23,6 +23,12 @@ namespace FigmaVisk
 
 					list.Remove(element);
 					alts.Add((element, capability, matchName));
+
+					// 子孫要素も全て消す
+					foreach (var item in GetElementsToRemove(list, id))
+					{
+						list.Remove(item);
+					}
 				}
 			}
 
@@ -43,6 +49,25 @@ namespace FigmaVisk
 			{
 				Capabilities = x.Item1.Capabilities.Append(x.Item2).ToArray()
 			}).Concat(list).ToArray();
+		}
+
+		private IEnumerable<Element> GetElementsToRemove(IEnumerable<Element> list, FigmaId rootId)
+		{
+			var children = list.Where(x => x.GetCapability<FamilyShip>() is { } family
+					&& family.ParentsNodeId == rootId.NodeId)
+				.ToArray();
+
+			foreach (var item in children)
+			{
+				yield return item;
+				if (item.GetCapability<FigmaId>() is {} id)
+				{
+					foreach (var element in GetElementsToRemove(list, id))
+					{
+						yield return element;
+					}
+				}
+			}
 		}
 	}
 }
