@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Altseed2;
+using FigmaVisk.Capability;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Altseed2;
-using FigmaVisk.Capability;
 using Visklusa.Abstraction.Notation;
 using Visklusa.IO;
 using Visklusa.JsonAltseed;

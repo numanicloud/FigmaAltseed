@@ -1,5 +1,6 @@
 ﻿using FigmaVisk.Capability;
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Visklusa.Abstraction.Notation;
@@ -14,13 +15,15 @@ namespace FigmaVisk.Entry
 		private readonly FigmaApiAgent _agent;
 		private readonly DocumentAnalyzer _documentAnalyzer;
 		private readonly AltTransformAnalyzer _altTransformAnalyzer;
+		private readonly ImageInstaller _imageInstaller;
 
 		public Converter(FigmaApiAgent agent, DocumentAnalyzer documentAnalyzer,
-			AltTransformAnalyzer altTransformAnalyzer)
+			AltTransformAnalyzer altTransformAnalyzer, ImageInstaller imageInstaller)
 		{
 			_agent = agent;
 			_documentAnalyzer = documentAnalyzer;
 			_altTransformAnalyzer = altTransformAnalyzer;
+			_imageInstaller = imageInstaller;
 		}
 
 		public async Task RunAsync(StartupOption option)
@@ -28,10 +31,10 @@ namespace FigmaVisk.Entry
 			var elements = ScanElements(option);
 			var repo = GetCapabilityRepo();
 			var variant = GetVariant(option, repo);
-			Save(variant, elements);
+			await SaveAsync(variant, elements);
 		}
 
-		private Element[] ScanElements(StartupOption option)
+		private NodeExport[] ScanElements(StartupOption option)
 		{
 			var document = _agent.Download(option);
 			if (document is null)
@@ -41,7 +44,9 @@ namespace FigmaVisk.Entry
 
 			var elements = _documentAnalyzer.Analyze(document);
 			elements = _altTransformAnalyzer.Convert(elements);
-			return elements;
+			var installations = _imageInstaller.Convert(elements);
+
+			return installations.Select(x => new NodeExport(x)).ToArray();
 		}
 
 		private static JsonCapabilityRepository GetCapabilityRepo()
@@ -70,7 +75,7 @@ namespace FigmaVisk.Entry
 			return variant;
 		}
 
-		private static void Save(JsonZipVariant variant, Element[] elements)
+		private static async Task SaveAsync(JsonZipVariant variant, NodeExport[] elements)
 		{
 			using var visk = new VisklusaSaver(variant);
 
@@ -78,7 +83,17 @@ namespace FigmaVisk.Entry
 			{
 				BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id, Text.Id, FigmaId.Id,
 				AltPosition.Id, FamilyShip.Id
-			}), elements));
+			}), elements.Select(x => x.Element).ToArray()));
+
+			foreach (var item in elements)
+			{
+				await item.Installation.OnSaveAsync(visk);
+			}
+		}
+
+		private record NodeExport(ImageInstaller.IImageInstallation Installation)
+		{
+			public Element Element => Installation.Element;
 		}
 	}
 }

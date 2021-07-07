@@ -17,8 +17,8 @@ namespace FigmaAltseed2.Try
 
 			Engine.Update();
 
-			var bottom = (SpriteNode)loaded.PathToNode["ClientArea/BottomUI"];
-			bottom.Position += new Vector2F(100, 0);
+			var bottom = (SpriteNode)loaded.PathToNode["ClientArea/Background/YellowOverlay"];
+			bottom.ZOrder = 1;
 
 			try
 			{

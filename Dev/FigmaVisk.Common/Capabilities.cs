@@ -45,6 +45,12 @@ namespace FigmaVisk.Capability
 		}
 	}
 
+	public record ImageRef(string Url) : ICapability
+	{
+		public const string Id = "FigmaVisk.Url";
+		public string CapabilityId => Id;
+	}
+
 	public record Image(string AssetPath) : ICapability
 	{
 		public const string Id = "FigmaVisk.Image";

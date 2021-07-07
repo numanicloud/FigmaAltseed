@@ -82,6 +82,11 @@ namespace FigmaVisk
 
 				yield return new ZOffset(context.Depth);
 			}
+
+			if (box.Paint is {type: "IMAGE"} p)
+			{
+				yield return new ImageRef(p.imageRef);
+			}
 		}
 
 		private static Stroke GetStroke(FigmaBox box)
