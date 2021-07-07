@@ -60,6 +60,7 @@ namespace FigmaVisk.Entry
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
+			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 			return repo;
 		}
 
@@ -82,7 +83,7 @@ namespace FigmaVisk.Entry
 			visk.AddLayout(new Layout(new CapabilityAssertion(new[]
 			{
 				BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id, Text.Id, FigmaId.Id,
-				AltPosition.Id, FamilyShip.Id
+				AltPosition.Id, FamilyShip.Id, Image.Id
 			}), elements.Select(x => x.Element).ToArray()));
 
 			foreach (var item in elements)

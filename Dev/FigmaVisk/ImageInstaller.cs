@@ -51,7 +51,7 @@ namespace FigmaVisk
 		{
 			public async ValueTask OnSaveAsync(VisklusaSaver saver)
 			{
-				saver.AddAsset(await Retriever.DownloadAsync(ImageRef), "ImageRef.png");
+				saver.AddAsset(await Retriever.DownloadAsync(ImageRef), $"{ImageRef}.png");
 			}
 		}
 

@@ -4,7 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FigmaVisk
 {
@@ -13,11 +15,11 @@ namespace FigmaVisk
 		private readonly StartupOption _option;
 		private Dictionary<string, string>? _imageMap;
 
-		public ImageRetriever(StartupOption option)
+		public ImageRetriever(IOptions<StartupOption> option)
 		{
-			_option = option;
+			_option = option.Value;
 		}
-		
+
 		[MemberNotNull(nameof(_imageMap))]
 		public async Task LoadAsync()
 		{
@@ -27,13 +29,12 @@ namespace FigmaVisk
 			var requestUri = $"https://api.figma.com/v1/files/{_option.FileId}/images";
 			var response = await http.GetStringAsync(requestUri);
 
-			var jsonElements = JsonConvert.DeserializeXNode(response).Root
-					?.Element("meta")
-					?.Element("images")
-					?.Elements()
-				?? throw new Exception();
+			JObject.Parse(response)["meta"]["images"].Children();
 
-			_imageMap = jsonElements.ToDictionary(x => x.Name.LocalName, x => x.Value);
+			var jsonElements = (JObject)JObject.Parse(response)["meta"]["images"];
+
+			_imageMap = jsonElements.Properties()
+				.ToDictionary(x => x.Name, x => (string)x.Value);
 		}
 
 		public async ValueTask<byte[]> DownloadAsync(string imageRef)

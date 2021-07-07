@@ -23,6 +23,8 @@ namespace FigmaVisk
 					collection.AddSingleton<DocumentAnalyzer>();
 					collection.AddSingleton<FigmaApiAgent>();
 					collection.AddSingleton<AltTransformAnalyzer>();
+					collection.AddSingleton<ImageInstaller>();
+					collection.AddSingleton<ImageRetriever>();
 					collection.Configure<StartupOption>(context.Configuration);
 					collection.AddHostedService<ConvertMain>();
 				}).RunConsoleAsync();
