@@ -13,6 +13,8 @@ namespace ViskAltseed2
 	public class VisklusaNodeLoader
 	{
 		private readonly Dictionary<(string, int), Font> _fonts = new();
+		private Action<TextNode>? _textConfiguration = null;
+		private Action<SpriteNode>? _spriteConfiguration = null;
 
 		public LoadResult LoadNodes(string visklusaPath)
 		{
@@ -46,18 +48,25 @@ namespace ViskAltseed2
 			_fonts[(fontFamilyName, fontSize)] = font;
 		}
 
+		public void ConfigureText(Action<TextNode> action) => _textConfiguration = action;
+		public void ConfigureSprite(Action<SpriteNode> action) => _spriteConfiguration = action;
+
 		private Node ToNode(Element element)
 		{
 			if (element.GetCapability<BoundingBox>() is { } box)
 			{
 				if (element.GetCapability<Image>() is { } image)
 				{
-					return CreateSpriteNode(element, box, image);
+					var sprite = CreateSpriteNode(element, box, image);
+					_spriteConfiguration?.Invoke(sprite);
+					return sprite;
 				}
 
 				if (element.GetCapability<Text>() is { } text)
 				{
-					return CreateTextNode(element, text, box);
+					var textNode = CreateTextNode(element, text, box);
+					_textConfiguration?.Invoke(textNode);
+					return textNode;
 				}
 
 				return new TransformNode()
@@ -70,7 +79,7 @@ namespace ViskAltseed2
 			return new Node();
 		}
 
-		private Node CreateTextNode(Element element, Text text, BoundingBox bound2)
+		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
 		{
 			var f = _fonts.GetValueOrDefault((text.FontFamily, text.FontSize)) is { } x
 				? x
@@ -98,7 +107,7 @@ namespace ViskAltseed2
 			return textNode;
 		}
 
-		private static Node CreateSpriteNode(Element element, BoundingBox bound, Image image)
+		private static SpriteNode CreateSpriteNode(Element element, BoundingBox bound, Image image)
 		{
 			var spriteNode = new SpriteNode()
 			{

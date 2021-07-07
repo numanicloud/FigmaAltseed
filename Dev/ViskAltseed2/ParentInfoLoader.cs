@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Altseed2;
 using FigmaVisk.Capability;
@@ -9,11 +8,11 @@ namespace ViskAltseed2
 {
 	internal class ParentInfoLoader
 	{
-		private readonly Dictionary<string, NodeAnalysis> _nodes;
+		private readonly Dictionary<string, NodeAnalysis> _allNode;
 
 		public ParentInfoLoader(IEnumerable<NodeAnalysis> idToNode)
 		{
-			_nodes = idToNode.Select(x => (id: x.Source.GetCapability<FigmaId>(), x))
+			_allNode = idToNode.Select(x => (id: x.Source.GetCapability<FigmaId>(), x))
 				.Where(x => x.id != null)
 				.ToDictionary(x => x.id!.NodeId, x => x.x);
 		}
@@ -40,7 +39,7 @@ namespace ViskAltseed2
 		private Dictionary<string, FamilyShipNode> GetDefaultFamilyMap()
 		{
 			var result = new Dictionary<string, FamilyShipNode>();
-			foreach (var (id, analysis) in _nodes)
+			foreach (var (id, analysis) in _allNode)
 			{
 				if (analysis.Source.GetCapability<FigmaId>() is {} figmaId)
 				{
@@ -76,6 +75,8 @@ namespace ViskAltseed2
 				{
 					transform.Position -= new Vector2F(box.X, box.Y);
 				}
+
+				ApplyAltseedNesting(child);
 			}
 		}
 
