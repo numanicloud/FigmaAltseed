@@ -1,5 +1,4 @@
-﻿using System;
-using Altseed2;
+﻿using Altseed2;
 using ViskAltseed2;
 
 namespace FigmaAltseed2.Try
@@ -8,13 +7,18 @@ namespace FigmaAltseed2.Try
 	{
 		static void Main(string[] args)
 		{
-			var result = Engine.Initialize("FigmaAltseed2.Try", 1280, 720);
+			Engine.Initialize("FigmaAltseed2.Try", 1280, 720);
 
-			var nodes = LoadLayout();
-			foreach (var node in nodes)
+			var loaded = LoadLayout();
+			foreach (var node in loaded.Nodes)
 			{
 				Engine.AddNode(node);
 			}
+
+			Engine.Update();
+
+			var bottom = (SpriteNode)loaded.PathToNode["ClientArea/BottomUI"];
+			bottom.Position += new Vector2F(100, 0);
 
 			try
 			{
@@ -29,7 +33,7 @@ namespace FigmaAltseed2.Try
 			}
 		}
 
-		private static Node[] LoadLayout()
+		private static LoadResult LoadLayout()
 		{
 			var loader = new VisklusaNodeLoader();
 			return loader.LoadNodes("figma.viskja");

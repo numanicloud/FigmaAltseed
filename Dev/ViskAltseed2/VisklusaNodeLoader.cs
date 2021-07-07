@@ -14,7 +14,7 @@ namespace ViskAltseed2
 	{
 		private readonly Dictionary<(string, int), Font> _fonts = new();
 
-		public Node[] LoadNodes(string visklusaPath)
+		public LoadResult LoadNodes(string visklusaPath)
 		{
 			var repo = new JsonCapabilityRepository();
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
@@ -35,9 +35,10 @@ namespace ViskAltseed2
 				.ToArray();
 
 			var parentLoader = new ParentInfoLoader(analyzed);
-			parentLoader.ApplyFamilyShip();
+			var map = parentLoader.ApplyFamilyShip();
+			var nodes = analyzed.Select(x => x.Node).ToArray();
 
-			return analyzed.Select(x => x.Node).ToArray();
+			return new LoadResult(nodes, map);
 		}
 
 		public void RegisterFont(string fontFamilyName, int fontSize, Font font)
