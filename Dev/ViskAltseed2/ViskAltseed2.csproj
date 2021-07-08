@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FigmaVisk.Capability\FigmaVisk.Capability.csproj" />
     <ProjectReference Include="..\FigmaVisk.Common\FigmaVisk.Capability.csproj" />
     <ProjectReference Include="..\Visklusa.JsonAltseed\Visklusa.JsonAltseed.csproj" />
   </ItemGroup>

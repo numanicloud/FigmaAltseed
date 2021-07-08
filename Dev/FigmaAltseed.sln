@@ -26,15 +26,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViskAltseed2", "ViskAltseed
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViskAltseed2.Packer", "ViskAltseed2.Packer\ViskAltseed2.Packer.csproj", "{92F216C6-A433-496E-8BD9-1BD1950A2284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FigmaVisk.Capability", "FigmaVisk.Common\FigmaVisk.Capability.csproj", "{106AD06F-BD45-4A0E-8332-8FB57943D377}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visklusa.JsonAltseed", "Visklusa.JsonAltseed\Visklusa.JsonAltseed.csproj", "{D48F6B66-5F51-4151-BA8F-D7F513642C40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Visklusa.JsonAltseed", "Visklusa.JsonAltseed\Visklusa.JsonAltseed.csproj", "{D48F6B66-5F51-4151-BA8F-D7F513642C40}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FigmaConverter", "FigmaConverter", "{E84EDA20-A46B-4A46-BA38-67E7007EC677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FigmaAltseed2", "FigmaAltseed2\FigmaAltseed2.csproj", "{4C9F2EA9-0412-484B-8C94-7C22208B66EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FigmaAltseed2", "FigmaAltseed2\FigmaAltseed2.csproj", "{4C9F2EA9-0412-484B-8C94-7C22208B66EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FigmaAltseed2.Try", "FigmaAltseed2.Try\FigmaAltseed2.Try.csproj", "{36332D44-BA0B-47FD-A326-2111B6029433}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FigmaAltseed2.Try", "FigmaAltseed2.Try\FigmaAltseed2.Try.csproj", "{36332D44-BA0B-47FD-A326-2111B6029433}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FigmaVisk.Capability", "FigmaVisk.Capability\FigmaVisk.Capability.csproj", "{39368B50-418F-4886-BC7B-33ECE79C406C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,10 +74,6 @@ Global
 		{92F216C6-A433-496E-8BD9-1BD1950A2284}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92F216C6-A433-496E-8BD9-1BD1950A2284}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92F216C6-A433-496E-8BD9-1BD1950A2284}.Release|Any CPU.Build.0 = Release|Any CPU
-		{106AD06F-BD45-4A0E-8332-8FB57943D377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{106AD06F-BD45-4A0E-8332-8FB57943D377}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{106AD06F-BD45-4A0E-8332-8FB57943D377}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{106AD06F-BD45-4A0E-8332-8FB57943D377}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D48F6B66-5F51-4151-BA8F-D7F513642C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D48F6B66-5F51-4151-BA8F-D7F513642C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D48F6B66-5F51-4151-BA8F-D7F513642C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,6 +86,10 @@ Global
 		{36332D44-BA0B-47FD-A326-2111B6029433}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36332D44-BA0B-47FD-A326-2111B6029433}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36332D44-BA0B-47FD-A326-2111B6029433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39368B50-418F-4886-BC7B-33ECE79C406C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39368B50-418F-4886-BC7B-33ECE79C406C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39368B50-418F-4886-BC7B-33ECE79C406C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39368B50-418F-4886-BC7B-33ECE79C406C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,8 +100,8 @@ Global
 		{4B23EB4D-C4A0-4752-90B8-D555C3AE0397} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
 		{B11E2849-722D-43C0-B697-8A0C409D1E15} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
 		{92F216C6-A433-496E-8BD9-1BD1950A2284} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
-		{106AD06F-BD45-4A0E-8332-8FB57943D377} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
 		{D48F6B66-5F51-4151-BA8F-D7F513642C40} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
+		{39368B50-418F-4886-BC7B-33ECE79C406C} = {E84EDA20-A46B-4A46-BA38-67E7007EC677}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A218CFF3-9E61-4FC2-BACE-1252ED8E7C57}
