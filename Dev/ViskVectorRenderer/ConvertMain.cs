@@ -7,6 +7,7 @@ using FigmaVisk.Capability;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Visklusa.Abstraction.Notation;
+using Visklusa.IO;
 using Visklusa.JsonZip;
 using Visklusa.Notation.Json;
 
@@ -50,11 +51,12 @@ namespace ViskVectorRenderer
 			var layout = GetLayout();
 			var svg = new VectorRenderer();
 			var refMod = new ImageReferenceModifier();
-			var serializer = new Serializer();
+			var serializer = new Serializer(_options);
 
 			var grouped = Group(layout.Elements);
 			var rendered = svg.RunGroup(grouped);
 			var modified = refMod.Apply(rendered);
+
 			serializer.Save(modified, outputPath);
 		}
 
