@@ -16,4 +16,5 @@
   "release": {
     "branchName": "nerdbank/v{version}"
   }
+  
 }

@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\FigmaSharp\FigmaSharp\FigmaSharp\FigmaSharp.csproj" />
     <ProjectReference Include="..\FigmaVisk.Capability\FigmaVisk.Capability.csproj" />
-    <ProjectReference Include="..\FigmaVisk.Common\FigmaVisk.Capability.csproj" />
   </ItemGroup>
 
 </Project>
