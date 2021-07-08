@@ -86,6 +86,7 @@ namespace FigmaVisk
 			if (box.Paint is {type: "IMAGE"} p)
 			{
 				yield return new ImageRef(p.imageRef);
+				yield return new ZOffset(context.Depth);
 			}
 		}
 
