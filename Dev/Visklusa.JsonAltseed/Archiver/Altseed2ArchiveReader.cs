@@ -5,8 +5,11 @@ namespace Visklusa.JsonAltseed.Archiver
 {
 	class Altseed2ArchiveReader : IArchiveReader
 	{
+		private readonly string _archivePath;
+
 		public Altseed2ArchiveReader(string archivePath)
 		{
+			_archivePath = archivePath;
 			Engine.File.AddRootPackage(archivePath);
 		}
 
@@ -17,7 +20,7 @@ namespace Visklusa.JsonAltseed.Archiver
 
 		public IAssetReader GetAsset(string filePath)
 		{
-			return new Altseed2AssetReader(filePath);
+			return new Altseed2AssetReader(filePath, _archivePath);
 		}
 	}
 }
