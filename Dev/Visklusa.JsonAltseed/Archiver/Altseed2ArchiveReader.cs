@@ -1,15 +1,18 @@
-﻿using Altseed2;
+﻿using System.IO;
+using Altseed2;
 using Visklusa.Abstraction.Archiver;
 
 namespace Visklusa.JsonAltseed.Archiver
 {
-	class Altseed2ArchiveReader : IArchiveReader
+	internal sealed class Altseed2ArchiveReader : IArchiveReader
 	{
-		private readonly string _archivePath;
-
 		public Altseed2ArchiveReader(string archivePath)
 		{
-			_archivePath = archivePath;
+			if (!System.IO.File.Exists(archivePath))
+			{
+				throw new FileNotFoundException("アーカイブファイルが見つかりませんでした。", archivePath);
+			}
+
 			Engine.File.AddRootPackage(archivePath);
 		}
 
@@ -20,7 +23,7 @@ namespace Visklusa.JsonAltseed.Archiver
 
 		public IAssetReader GetAsset(string filePath)
 		{
-			return new Altseed2AssetReader(filePath, _archivePath);
+			return new Altseed2AssetReader(filePath);
 		}
 	}
 }

@@ -6,7 +6,7 @@ using Visklusa.Notation.Json;
 
 namespace Visklusa.JsonAltseed
 {
-	public class JsonAltseedVariant : IVisklusaVariant
+	public sealed class JsonAltseedVariant : IVisklusaVariant
 	{
 		private readonly string _visklusaPath;
 		private readonly JsonCapabilityRepository _repository;
