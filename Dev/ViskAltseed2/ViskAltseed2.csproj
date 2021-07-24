@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Altseed2" Version="2.0.0-beta1" />
+    <PackageReference Include="Altseed2" Version="2.0.0" />
     <PackageReference Include="Visklusa.IO" Version="1.0.0-alpha.7" />
   </ItemGroup>
 

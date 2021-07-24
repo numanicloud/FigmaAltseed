@@ -12,7 +12,6 @@ namespace ViskAltseed2
 {
 	public class VisklusaNodeLoader
 	{
-		private readonly Dictionary<(string, int), Font> _fonts = new();
 		private Action<TextNode>? _textConfiguration = null;
 		private Action<SpriteNode>? _spriteConfiguration = null;
 
@@ -41,11 +40,6 @@ namespace ViskAltseed2
 			var nodes = analyzed.Select(x => x.Node).ToArray();
 
 			return new LoadResult(nodes, map);
-		}
-
-		public void RegisterFont(string fontFamilyName, int fontSize, Font font)
-		{
-			_fonts[(fontFamilyName, fontSize)] = font;
 		}
 
 		public void ConfigureText(Action<TextNode> action) => _textConfiguration = action;
@@ -81,20 +75,16 @@ namespace ViskAltseed2
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
 		{
-			var f = _fonts.GetValueOrDefault((text.FontFamily, text.FontSize)) is { } x
-				? x
-				: Font.LoadDynamicFont("mplus-1c-bold.ttf", text.FontSize);
-
 			var fill = text.Fill;
 			var textNode = new TextNode()
 			{
 				Position = new Vector2F(bound2.X, bound2.Y),
 				Text = text.Content,
-				Font = f,
 				Color = new Color((byte)(fill.Red * 255),
 					(byte)(fill.Green * 255),
 					(byte)(fill.Blue * 255),
 					(byte)(fill.Alpha * 255)),
+				FontSize = text.FontSize,
 			};
 
 			if (element.GetCapability<ZOffset>() is { } zOffset)
