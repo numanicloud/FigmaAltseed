@@ -18,7 +18,6 @@ namespace Visklusa.JsonAltseed.Archiver
 
 		public void Dispose()
 		{
-			Engine.File.ClearRootDirectories();
 		}
 
 		public IAssetReader GetAsset(string filePath)
