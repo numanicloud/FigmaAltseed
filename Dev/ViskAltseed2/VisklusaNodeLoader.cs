@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Visklusa.Abstraction.Notation;
+using Visklusa.Abstraction.Variant;
 using Visklusa.IO;
 using Visklusa.JsonAltseed;
 using Visklusa.Notation.Json;
@@ -15,7 +16,7 @@ namespace ViskAltseed2
 		private Action<TextNode>? _textConfiguration = null;
 		private Action<SpriteNode>? _spriteConfiguration = null;
 
-		public LoadResult LoadNodes(string visklusaPath)
+		public LoadResult LoadNodes(Func<JsonCapabilityRepository, IVisklusaVariant> getVariant)
 		{
 			var repo = new JsonCapabilityRepository();
 			repo.Register(new JsonCapabilityBase<BoundingBox>(BoundingBox.Id));
@@ -26,7 +27,7 @@ namespace ViskAltseed2
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
 
-			var variant = new JsonAltseedVariant(visklusaPath, repo);
+			var variant = getVariant.Invoke(repo);
 			using var loader = new VisklusaLoader(variant);
 
 			var layout = loader.GetLayout();

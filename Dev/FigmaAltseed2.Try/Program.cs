@@ -1,5 +1,6 @@
 ﻿using Altseed2;
 using ViskAltseed2;
+using Visklusa.JsonAltseed;
 
 namespace FigmaAltseed2.Try
 {
@@ -36,7 +37,7 @@ namespace FigmaAltseed2.Try
 		private static LoadResult LoadLayout()
 		{
 			var loader = new VisklusaNodeLoader();
-			return loader.LoadNodes("figma.viskja");
+			return loader.LoadNodes(repo => new JsonAltseedVariant("layout.viskjz", repo));
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Visklusa.JsonAltseed.Archiver
 			{
 				throw new FileNotFoundException("アーカイブファイルが見つかりませんでした。", archivePath);
 			}
-
+			
 			Engine.File.AddRootPackage(archivePath);
 		}
 
