@@ -3,10 +3,10 @@ using FigmaVisk.Capability;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Visklusa.Abstraction.Archiver;
 using Visklusa.Abstraction.Notation;
 using Visklusa.Abstraction.Variant;
 using Visklusa.IO;
-using Visklusa.JsonAltseed;
 using Visklusa.Notation.Json;
 
 namespace ViskAltseed2
@@ -29,10 +29,11 @@ namespace ViskAltseed2
 
 			var variant = getVariant.Invoke(repo);
 			using var loader = new VisklusaLoader(variant);
-
+			
 			var layout = loader.GetLayout();
+			var archive = variant.GetPackageReader();
 			var analyzed = layout.Elements
-				.Select(x => ToNode(x).WithElement(x))
+				.Select(x => ToNode(x, archive).WithElement(x))
 				.FilterNull()
 				.ToArray();
 
@@ -46,32 +47,32 @@ namespace ViskAltseed2
 		public void ConfigureText(Action<TextNode> action) => _textConfiguration = action;
 		public void ConfigureSprite(Action<SpriteNode> action) => _spriteConfiguration = action;
 
-		private Node ToNode(Element element)
+		private Node ToNode(Element element, IArchiveReader archive)
 		{
-			if (element.GetCapability<BoundingBox>() is { } box)
+			if (element.GetCapability<BoundingBox>() is not { } box)
 			{
-				if (element.GetCapability<Image>() is { } image)
-				{
-					var sprite = CreateSpriteNode(element, box, image);
-					_spriteConfiguration?.Invoke(sprite);
-					return sprite;
-				}
-
-				if (element.GetCapability<Text>() is { } text)
-				{
-					var textNode = CreateTextNode(element, text, box);
-					_textConfiguration?.Invoke(textNode);
-					return textNode;
-				}
-
-				return new TransformNode()
-				{
-					Position = new Vector2F(box.X, box.Y)
-				};
-
+				return new Node();
 			}
 
-			return new Node();
+			if (element.GetCapability<Image>() is { } image)
+			{
+				var assetPath = archive.GetAsset(image.AssetPath).FilePath;
+				var sprite = CreateSpriteNode(element, box, assetPath);
+				_spriteConfiguration?.Invoke(sprite);
+				return sprite;
+			}
+
+			if (element.GetCapability<Text>() is { } text)
+			{
+				var textNode = CreateTextNode(element, text, box);
+				_textConfiguration?.Invoke(textNode);
+				return textNode;
+			}
+
+			return new TransformNode()
+			{
+				Position = new Vector2F(box.X, box.Y)
+			};
 		}
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
@@ -98,12 +99,12 @@ namespace ViskAltseed2
 			return textNode;
 		}
 
-		private static SpriteNode CreateSpriteNode(Element element, BoundingBox bound, Image image)
+		private static SpriteNode CreateSpriteNode(Element element, BoundingBox bound, string assetPath)
 		{
 			var spriteNode = new SpriteNode()
 			{
 				Position = new Vector2F(bound.X, bound.Y),
-				Texture = Texture2D.Load(image.AssetPath),
+				Texture = Texture2D.Load(assetPath),
 			};
 
 			if (element.GetCapability<ZOffset>() is { } zOffset)
