@@ -62,7 +62,7 @@ namespace FigmaVisk
 			yield return new BoundingBox(bound.X, bound.Y, bound.Width, bound.Height);
 
 			yield return new Text(text.characters, text.style.fontFamily, text.style.fontSize, GetFill(new FigmaBox(text)));
-			yield return new ZOffset(context.Depth);
+			yield return new ZOffset(context.NextId);
 		}
 
 		private IEnumerable<ICapability> GetCapabilities(FigmaBox box, RecursiveContext context)
@@ -80,13 +80,13 @@ namespace FigmaVisk
 					yield return new RoundedRectangle(box.CornerRadius);
 				}
 
-				yield return new ZOffset(context.Depth);
+				yield return new ZOffset(context.NextId);
 			}
 
 			if (box.Paint is {type: "IMAGE"} p)
 			{
 				yield return new ImageRef(p.imageRef);
-				yield return new ZOffset(context.Depth);
+				yield return new ZOffset(context.NextId);
 			}
 		}
 

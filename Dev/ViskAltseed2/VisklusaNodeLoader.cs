@@ -31,7 +31,7 @@ namespace ViskAltseed2
 			using var loader = new VisklusaLoader(variant);
 			
 			var layout = loader.GetLayout();
-			var archive = variant.GetPackageReader();
+			using var archive = variant.GetPackageReader();
 			var analyzed = layout.Elements
 				.Select(x => ToNode(x, archive).WithElement(x))
 				.FilterNull()
@@ -68,11 +68,8 @@ namespace ViskAltseed2
 				_textConfiguration?.Invoke(textNode);
 				return textNode;
 			}
-
-			return new TransformNode()
-			{
-				Position = new Vector2F(box.X, box.Y)
-			};
+			
+			return CreateSpriteNode(element, box, null);
 		}
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
@@ -99,7 +96,7 @@ namespace ViskAltseed2
 			return textNode;
 		}
 
-		private static SpriteNode CreateSpriteNode(Element element, BoundingBox bound, string assetPath)
+		private static SpriteNode CreateSpriteNode(Element element, BoundingBox bound, string? assetPath)
 		{
 			var spriteNode = new SpriteNode()
 			{
