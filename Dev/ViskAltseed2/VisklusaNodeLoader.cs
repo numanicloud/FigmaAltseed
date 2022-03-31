@@ -69,7 +69,10 @@ namespace ViskAltseed2
 				return textNode;
 			}
 			
-			return new Node();
+			return new TransformNode()
+			{
+				Position = new Vector2F(box.X, box.Y)
+			};
 		}
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
