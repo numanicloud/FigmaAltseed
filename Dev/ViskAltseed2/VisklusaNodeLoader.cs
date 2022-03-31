@@ -69,7 +69,7 @@ namespace ViskAltseed2
 				return textNode;
 			}
 			
-			return CreateSpriteNode(element, box, null);
+			return new Node();
 		}
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
