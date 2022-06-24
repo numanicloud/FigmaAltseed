@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "FigmaAltseed2": {
-      "commandName": "Project",
-      "commandLineArgs": "FileId=\"bG2THvuZmJLSqf3Pvghbpc\" Token=\"154108-fb48e8ec-095c-4af8-8ff8-a9600495fd83\" OutputPath=\"figma.viskja\"",
-      "workingDirectory": "D:\\Home\\MyDocuments\\Projects\\Repos\\CSharp\\Tools\\Groups\\Altseed\\FigmaAltseed\\Dev\\FigmaAltseed2\\bin\\Debug\\net5.0"
-    }
-  }
-}

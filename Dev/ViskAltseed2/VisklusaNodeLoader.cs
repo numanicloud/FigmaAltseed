@@ -3,11 +3,14 @@ using FigmaVisk.Capability;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Visklusa.Abstraction.Archiver;
 using Visklusa.Abstraction.Notation;
 using Visklusa.Abstraction.Variant;
 using Visklusa.IO;
 using Visklusa.Notation.Json;
+
+[assembly: InternalsVisibleTo("ViskAltseed2.Test")]
 
 namespace ViskAltseed2
 {
