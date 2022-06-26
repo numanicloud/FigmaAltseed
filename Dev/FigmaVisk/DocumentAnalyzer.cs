@@ -47,7 +47,7 @@ namespace FigmaVisk
 			{
 				FigmaText text => GetCapabilities(text, context),
 				FigmaVector vector => GetCapabilities(new FigmaBox(vector), context),
-				FigmaFrame frame => GetCapabilities(new FigmaBox(frame), context),
+				FigmaFrame frame => GetCapabilities(frame, context),
 				_ => new ICapability[0],
 			})
 				.Append(new FigmaId(node.id, node.name))
@@ -63,6 +63,24 @@ namespace FigmaVisk
 
 			yield return new Text(text.characters, text.style.fontFamily, text.style.fontSize, GetFill(new FigmaBox(text)));
 			yield return new ZOffset(context.NextId);
+		}
+
+		private IEnumerable<ICapability> GetCapabilities(FigmaFrame frame, RecursiveContext context)
+		{
+			foreach (var capability in GetCapabilities(new FigmaBox(frame), context))
+			{
+				yield return capability;
+			}
+
+			if (frame.name.EndsWith("@VerticalScroll"))
+			{
+				yield return new VerticalScroll();
+			}
+
+			if (frame.name.EndsWith("@VerticalList"))
+			{
+				yield return new VerticalList(frame.itemSpacing);
+			}
 		}
 
 		private IEnumerable<ICapability> GetCapabilities(FigmaBox box, RecursiveContext context)

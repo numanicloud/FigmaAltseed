@@ -29,6 +29,8 @@ namespace ViskAltseed2
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
+			repo.Register(new JsonCapabilityBase<VerticalScroll>(VerticalScroll.Id));
+			repo.Register(new JsonCapabilityBase<VerticalList>(VerticalList.Id));
 
 			var variant = getVariant.Invoke(repo);
 			using var loader = new VisklusaLoader(variant);

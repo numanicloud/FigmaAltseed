@@ -80,4 +80,30 @@ namespace FigmaVisk.Capability
 		public const string Id = "FigmaVisk.FamilyShip";
 		public string CapabilityId => Id;
 	}
+
+	public record VerticalScroll() : ICapability
+	{
+		public const string Id = "FigmaVisk.VerticalScroll";
+		public string CapabilityId => Id;
+	}
+
+	public record VerticalList(float Spacing) : ICapability
+	{
+		public const string Id = "FigmaVisk.VerticalList";
+		public string CapabilityId => Id;
+	}
+
+	public record Line : ICapability
+	{
+		public const string Id = "FigmaVisk.Line";
+		public string CapabilityId => Id;
+	}
+
+	public record Polygon(Vertex[] Vertices) : ICapability
+	{
+		public const string Id = "FigmaVisk.Polygon";
+		public string CapabilityId => Id;
+	}
+
+	public record Vertex(float X, float Y);
 }

@@ -61,6 +61,8 @@ namespace FigmaVisk.Entry
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
+			repo.Register(new JsonCapabilityBase<VerticalScroll>(VerticalScroll.Id));
+			repo.Register(new JsonCapabilityBase<VerticalList>(VerticalList.Id));
 			return repo;
 		}
 
@@ -83,7 +85,7 @@ namespace FigmaVisk.Entry
 			visk.AddLayout(new Layout(new CapabilityAssertion(new[]
 			{
 				BoundingBox.Id, ZOffset.Id, Paint.Id, RoundedRectangle.Id, Text.Id, FigmaId.Id,
-				AltPosition.Id, FamilyShip.Id, Image.Id
+				AltPosition.Id, FamilyShip.Id, Image.Id, VerticalScroll.Id, VerticalList.Id
 			}), elements.Select(x => x.Element).ToArray()));
 
 			foreach (var item in elements)
