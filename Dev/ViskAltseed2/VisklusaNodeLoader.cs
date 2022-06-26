@@ -3,6 +3,7 @@ using FigmaVisk.Capability;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using Visklusa.Abstraction.Archiver;
 using Visklusa.Abstraction.Notation;
@@ -74,10 +75,12 @@ namespace ViskAltseed2
 				return textNode;
 			}
 			
-			return new TransformNode()
+			var transform = new TransformNode()
 			{
 				Position = new Vector2F(box.X, box.Y)
 			};
+			SetCommonCapability(element, transform);
+			return transform;
 		}
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
@@ -129,7 +132,10 @@ namespace ViskAltseed2
 				node.AddChildNode(new AltPositionTagNode(new Vector2F(alt.X, alt.Y)));
 			}
 
-
+			if (element.GetCapability<VerticalList>() is {} vList)
+			{
+				node.AddChildNode(new VerticalListNode(vList.Spacing){ Position = new Vector2F(0, 0) });
+			}
 		}
 	}
 
