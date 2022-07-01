@@ -136,6 +136,11 @@ namespace ViskAltseed2
 			{
 				node.AddChildNode(new VerticalListNode(vList.Spacing){ Position = new Vector2F(0, 0) });
 			}
+
+			if (element.GetCapability<VerticalScroll>() is {} vScroll)
+			{
+				node.AddChildNode(new VerticalScrollView());
+			}
 		}
 	}
 
@@ -155,6 +160,24 @@ namespace ViskAltseed2
 		internal static NodeAnalysis? WithElement(this Node? node, Element element)
 		{
 			return node is { } ? new(element, node) : null;
+		}
+
+		internal static Vector2F GetAbsolutePosition(this TransformNode node)
+		{
+			return node.Parent is TransformNode transform
+				? node.Position + GetAbsolutePosition(transform)
+				: node.Parent is { } parent
+					? node.Position + GetAbsolutePosition(parent)
+					: node.Position;
+		}
+
+		private static Vector2F GetAbsolutePosition(this Node node)
+		{
+			return node.Parent is TransformNode transform
+				? GetAbsolutePosition(transform)
+				: node.Parent is { } parent
+					? GetAbsolutePosition(parent)
+					: new Vector2F(0, 0);
 		}
 	}
 }
