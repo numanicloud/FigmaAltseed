@@ -61,6 +61,8 @@ namespace ViskVectorRenderer
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
+			repo.Register(new JsonCapabilityBase<VerticalScroll>(VerticalScroll.Id));
+			repo.Register(new JsonCapabilityBase<VerticalList>(VerticalList.Id));
 			return repo;
 		}
 

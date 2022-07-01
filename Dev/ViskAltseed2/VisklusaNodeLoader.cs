@@ -1,9 +1,7 @@
 ﻿using Altseed2;
 using FigmaVisk.Capability;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using Visklusa.Abstraction.Archiver;
 using Visklusa.Abstraction.Notation;
@@ -74,6 +72,18 @@ namespace ViskAltseed2
 				_textConfiguration?.Invoke(textNode);
 				return textNode;
 			}
+
+			if (element.GetCapability<Paint>() is {} paint)
+			{
+				var rectangle = new RectangleNode()
+				{
+					Position = new Vector2F(box.X, box.Y),
+					Scale = new Vector2F(box.Width, box.Height),
+					Color = paint.Fill.ToColor()
+				};
+				SetDrawnCapability(element, rectangle);
+				return rectangle;
+			}
 			
 			var transform = new TransformNode()
 			{
@@ -85,24 +95,15 @@ namespace ViskAltseed2
 
 		private TextNode CreateTextNode(Element element, Text text, BoundingBox bound2)
 		{
-			var fill = text.Fill;
 			var textNode = new TextNode()
 			{
 				Position = new Vector2F(bound2.X, bound2.Y),
 				Text = text.Content,
-				Color = new Color((byte)(fill.Red * 255),
-					(byte)(fill.Green * 255),
-					(byte)(fill.Blue * 255),
-					(byte)(fill.Alpha * 255)),
+				Color = text.Fill.ToColor(),
 				FontSize = text.FontSize,
 			};
 
-			if (element.GetCapability<ZOffset>() is { } zOffset)
-			{
-				textNode.ZOrder = (int)zOffset.Z;
-			}
-
-			SetCommonCapability(element, textNode);
+			SetDrawnCapability(element, textNode);
 
 			return textNode;
 		}
@@ -115,14 +116,19 @@ namespace ViskAltseed2
 				Texture = Texture2D.Load(assetPath),
 			};
 
-			if (element.GetCapability<ZOffset>() is { } zOffset)
-			{
-				spriteNode.ZOrder = (int)zOffset.Z;
-			}
-
-			SetCommonCapability(element, spriteNode);
+			SetDrawnCapability(element, spriteNode);
 
 			return spriteNode;
+		}
+
+		private static void SetDrawnCapability<TNode>(Element element, TNode node) where TNode : Node, IDrawn
+		{
+			if (element.GetCapability<ZOffset>() is { } zOffset)
+			{
+				node.ZOrder = (int)zOffset.Z;
+			}
+
+			SetCommonCapability(element, node);
 		}
 
 		private static void SetCommonCapability(Element element, Node node)
@@ -141,43 +147,6 @@ namespace ViskAltseed2
 			{
 				node.AddChildNode(new VerticalScrollView());
 			}
-		}
-	}
-
-	public static class Helpers
-	{
-		public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source) where T : class
-		{
-			foreach (var item in source)
-			{
-				if (item is not null)
-				{
-					yield return item;
-				}
-			}
-		}
-
-		internal static NodeAnalysis? WithElement(this Node? node, Element element)
-		{
-			return node is { } ? new(element, node) : null;
-		}
-
-		internal static Vector2F GetAbsolutePosition(this TransformNode node)
-		{
-			return node.Parent is TransformNode transform
-				? node.Position + GetAbsolutePosition(transform)
-				: node.Parent is { } parent
-					? node.Position + GetAbsolutePosition(parent)
-					: node.Position;
-		}
-
-		private static Vector2F GetAbsolutePosition(this Node node)
-		{
-			return node.Parent is TransformNode transform
-				? GetAbsolutePosition(transform)
-				: node.Parent is { } parent
-					? GetAbsolutePosition(parent)
-					: new Vector2F(0, 0);
 		}
 	}
 }

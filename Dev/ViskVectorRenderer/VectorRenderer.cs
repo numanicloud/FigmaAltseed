@@ -46,7 +46,8 @@ namespace ViskVectorRenderer
 		private RenderResult RenderRoundedRectangle(Element element, Paint paint)
 		{
 			if (element.GetCapability<BoundingBox>() is not {} bound
-				|| (paint.Fill == Fill.Blank && paint.Stroke == Stroke.Blank))
+				|| (paint.Fill == Fill.Blank && paint.Stroke == Stroke.Blank)
+				|| element.GetCapability<RoundedRectangle>() is not {} rounded)
 			{
 				return new SkipRenderResult(element);
 			}
@@ -63,12 +64,9 @@ namespace ViskVectorRenderer
 				Stroke = new SvgColourServer(GetColor(paint.Stroke)),
 				StrokeWidth = Pixel(paint.Stroke.Weight),
 			};
-
-			if (element.GetCapability<RoundedRectangle>() is {} rounded)
-			{
-				rectangle.CornerRadiusX = Pixel(rounded.LeftBottom);
-				rectangle.CornerRadiusY = Pixel(rounded.LeftBottom);
-			}
+			
+			rectangle.CornerRadiusX = Pixel(rounded.LeftBottom);
+			rectangle.CornerRadiusY = Pixel(rounded.LeftBottom);
 
 			if (paint.Stroke != Stroke.Blank)
 			{

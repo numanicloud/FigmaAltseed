@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Altseed2" Version="2.0.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Visklusa.IO" Version="1.0.0-alpha.7" />
   </ItemGroup>
 
