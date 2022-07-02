@@ -58,6 +58,7 @@ namespace ViskVectorRenderer
 			repo.Register(new JsonCapabilityBase<ZOffset>(ZOffset.Id));
 			repo.Register(new JsonCapabilityBase<Image>(Image.Id));
 			repo.Register(new JsonCapabilityBase<Text>(Text.Id));
+			repo.Register(new JsonCapabilityBase<Paint>(Paint.Id));
 			repo.Register(new JsonCapabilityBase<FigmaId>(FigmaId.Id));
 			repo.Register(new JsonCapabilityBase<AltPosition>(AltPosition.Id));
 			repo.Register(new JsonCapabilityBase<FamilyShip>(FamilyShip.Id));
